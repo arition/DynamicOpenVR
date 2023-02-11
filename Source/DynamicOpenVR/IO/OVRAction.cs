@@ -25,7 +25,7 @@ namespace DynamicOpenVR.IO
 {
     public abstract class OVRAction : IDisposable
     {
-        private static readonly Regex kNameRegex = new Regex(@"^\/actions\/[a-z0-9_-]+\/(?:in|out)\/[a-z0-9_-]+$", RegexOptions.IgnoreCase);
+        private static readonly Regex kNameRegex = new(@"^\/actions\/[a-z0-9_-]+\/(?:in|out)\/[a-z0-9_-]+$", RegexOptions.IgnoreCase);
 
         protected OVRAction(string name)
         {

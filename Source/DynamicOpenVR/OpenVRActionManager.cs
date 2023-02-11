@@ -35,10 +35,10 @@ namespace DynamicOpenVR
     {
         private static OpenVRActionManager _instance;
 
-        private readonly Dictionary<string, OVRAction> _actions = new Dictionary<string, OVRAction>();
-        private readonly HashSet<string> _actionSetNames = new HashSet<string>();
-        private readonly List<ulong> _actionSetHandles = new List<ulong>();
-        private readonly JsonSerializerSettings _jsonSerializerSettings = new JsonSerializerSettings
+        private readonly Dictionary<string, OVRAction> _actions = new();
+        private readonly HashSet<string> _actionSetNames = new();
+        private readonly List<ulong> _actionSetHandles = new();
+        private readonly JsonSerializerSettings _jsonSerializerSettings = new()
         {
             ContractResolver = new DefaultContractResolver
             {

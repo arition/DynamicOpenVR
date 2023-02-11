@@ -86,7 +86,7 @@ namespace DynamicOpenVR
 
             EVRInputError error = OpenVR.Input.UpdateActionState(activeActionSets, (uint)Marshal.SizeOf(typeof(VRActiveActionSet_t)));
 
-            if (error != EVRInputError.None && error != EVRInputError.NoData)
+            if (error is not EVRInputError.None and not EVRInputError.NoData)
             {
                 throw new OpenVRInputException($"Could not update action states: {error}", error);
             }
@@ -98,7 +98,7 @@ namespace DynamicOpenVR
 
             EVRInputError error = OpenVR.Input.GetAnalogActionData(actionHandle, ref actionData, (uint)Marshal.SizeOf(typeof(InputAnalogActionData_t)), OpenVR.k_ulInvalidInputValueHandle);
 
-            if (error != EVRInputError.None && error != EVRInputError.NoData)
+            if (error is not EVRInputError.None and not EVRInputError.NoData)
             {
                 throw new OpenVRInputException($"Could not get analog data for action with handle {actionHandle}: {error}", error);
             }
@@ -112,7 +112,7 @@ namespace DynamicOpenVR
 
             EVRInputError error = OpenVR.Input.GetDigitalActionData(actionHandle, ref actionData, (uint)Marshal.SizeOf(typeof(InputDigitalActionData_t)), OpenVR.k_ulInvalidInputValueHandle);
 
-            if (error != EVRInputError.None && error != EVRInputError.NoData)
+            if (error is not EVRInputError.None and not EVRInputError.NoData)
             {
                 throw new OpenVRInputException($"Could not get digital data for action with handle {actionHandle}: {error}", error);
             }
@@ -126,7 +126,7 @@ namespace DynamicOpenVR
 
             EVRInputError error = OpenVR.Input.GetSkeletalActionData(actionHandle, ref actionData, (uint)Marshal.SizeOf(typeof(InputSkeletalActionData_t)));
 
-            if (error != EVRInputError.None && error != EVRInputError.NoData)
+            if (error is not EVRInputError.None and not EVRInputError.NoData)
             {
                 throw new OpenVRInputException($"Could not get skeletal data for action with handle {actionHandle}: {error}", error);
             }
@@ -139,7 +139,7 @@ namespace DynamicOpenVR
             InputPoseActionData_t actionData = default;
 
             EVRInputError error = OpenVR.Input.GetPoseActionDataRelativeToNow(actionHandle, origin, 0, ref actionData, (uint)Marshal.SizeOf(typeof(InputPoseActionData_t)), OpenVR.k_ulInvalidInputValueHandle);
-            if (error != EVRInputError.None && error != EVRInputError.NoData)
+            if (error is not EVRInputError.None and not EVRInputError.NoData)
             {
                 throw new OpenVRInputException($"Could not get pose data for action with handle {actionHandle}: {error}", error);
             }
@@ -153,7 +153,7 @@ namespace DynamicOpenVR
 
             EVRInputError error = OpenVR.Input.GetSkeletalSummaryData(actionHandle, EVRSummaryType.FromDevice, ref summaryData);
 
-            if (error != EVRInputError.None && error != EVRInputError.NoData)
+            if (error is not EVRInputError.None and not EVRInputError.NoData)
             {
                 throw new OpenVRInputException($"Could not get skeletal summary data for action with handle {actionHandle}: {error}", error);
             }
@@ -165,7 +165,7 @@ namespace DynamicOpenVR
         {
             EVRInputError error = OpenVR.Input.TriggerHapticVibrationAction(actionHandle, startSecondsFromNow, durationSeconds, frequency, amplitude, OpenVR.k_ulInvalidInputValueHandle);
 
-            if (error != EVRInputError.None && error != EVRInputError.NoData)
+            if (error is not EVRInputError.None and not EVRInputError.NoData)
             {
                 throw new OpenVRInputException($"Failed to trigger haptic feedback vibration for action with handle {actionHandle}: {error}", error);
             }

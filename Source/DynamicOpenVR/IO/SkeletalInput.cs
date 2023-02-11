@@ -36,7 +36,7 @@ namespace DynamicOpenVR.IO
         /// <summary>
         /// Gets the summary data of the skeleton (finger curl and splay).
         /// </summary>
-        public SkeletalSummaryData summaryData => new SkeletalSummaryData(_summaryData);
+        public SkeletalSummaryData summaryData => new(_summaryData);
 
         /// <inheritdoc/>
         internal override void UpdateData()

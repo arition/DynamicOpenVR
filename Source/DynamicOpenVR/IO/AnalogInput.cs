@@ -28,14 +28,14 @@ namespace DynamicOpenVR.IO
         }
 
         /// <inheritdoc/>
-        public override bool isActive => _actionData.bActive;
+        public override bool isActive => actionData.bActive;
 
-        protected InputAnalogActionData_t _actionData { get; set; }
+        protected InputAnalogActionData_t actionData { get; set; }
 
         /// <inheritdoc/>
         internal override void UpdateData()
         {
-            _actionData = OpenVRFacade.GetAnalogActionData(handle);
+            actionData = OpenVRFacade.GetAnalogActionData(handle);
         }
     }
 }

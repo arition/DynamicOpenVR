@@ -30,11 +30,11 @@ namespace DynamicOpenVR.IO
         /// <summary>
         /// Gets the current state of this axis of the analog action.
         /// </summary>
-        public Vector2 vector => new Vector2(_actionData.x, _actionData.y);
+        public Vector2 vector => new(actionData.x, actionData.y);
 
         /// <summary>
         /// Gets the change in this axis for this action since the previous frame.
         /// </summary>
-        public Vector2 delta => new Vector2(_actionData.deltaX, _actionData.deltaY);
+        public Vector2 delta => new(actionData.deltaX, actionData.deltaY);
     }
 }
