@@ -1,4 +1,4 @@
-// <copyright file="XRInputPatches.cs" company="Nicolas Gnyra">
+// <copyright file="InputTracking.cs" company="Nicolas Gnyra">
 // DynamicOpenVR.BeatSaber - An implementation of DynamicOpenVR as a Beat Saber plugin.
 // Copyright © 2019-2021 Nicolas Gnyra
 //
@@ -23,8 +23,7 @@ using UnityEngine.XR;
 
 namespace DynamicOpenVR.BeatSaber.HarmonyPatches
 {
-    [HarmonyPatch(typeof(InputTracking))]
-    [HarmonyPatch("GetLocalPosition", MethodType.Normal)]
+    [HarmonyPatch(typeof(InputTracking), nameof(InputTracking.GetLocalPosition))]
     internal class InputTracking_GetLocalPosition
     {
         [HarmonyPriority(Priority.First)]
@@ -46,8 +45,7 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
         }
     }
 
-    [HarmonyPatch(typeof(InputTracking))]
-    [HarmonyPatch("GetLocalRotation", MethodType.Normal)]
+    [HarmonyPatch(typeof(InputTracking), nameof(InputTracking.GetLocalRotation))]
     internal class InputTracking_GetLocalRotation
     {
         [HarmonyPriority(Priority.First)]
@@ -69,8 +67,7 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
         }
     }
 
-    [HarmonyPatch(typeof(InputTracking))]
-    [HarmonyPatch("GetNodeStates", MethodType.Normal)]
+    [HarmonyPatch(typeof(InputTracking), nameof(InputTracking.GetNodeStates))]
     internal class InputTracking_GetNodeStates
     {
         [HarmonyPriority(Priority.First)]

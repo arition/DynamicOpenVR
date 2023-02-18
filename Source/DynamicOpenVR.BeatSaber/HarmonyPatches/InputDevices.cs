@@ -1,4 +1,4 @@
-﻿// <copyright file="InputDevicesPatches.cs" company="Nicolas Gnyra">
+﻿// <copyright file="InputDevices.cs" company="Nicolas Gnyra">
 // DynamicOpenVR.BeatSaber - An implementation of DynamicOpenVR as a Beat Saber plugin.
 // Copyright © 2019-2021 Nicolas Gnyra
 //
@@ -163,7 +163,6 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
     /*
      * Support the following CommonUsages:
      * primary2DAxis (Vector2)
-     * secondary2DAxis (Vector2)
      */
     [HarmonyPatch(typeof(InputDevice), nameof(InputDevice.TryGetFeatureValue), new Type[] { typeof(InputFeatureUsage<Vector2>), typeof(Vector2) }, new ArgumentType[] { ArgumentType.Normal, ArgumentType.Out })]
     internal static class InputDevice_TryGetFeatureValue_Vector2
