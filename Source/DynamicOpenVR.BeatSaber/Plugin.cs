@@ -30,6 +30,7 @@ using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Valve.VR;
+using Zenject;
 using Logger = IPA.Logging.Logger;
 
 namespace DynamicOpenVR.BeatSaber
@@ -116,7 +117,11 @@ namespace DynamicOpenVR.BeatSaber
             }
             else if (scene.name == "MainMenu" && _updatedAppConfig != null)
             {
-                AppConfigConfirmationModal.Create(_updatedAppConfig);
+                SceneContext sceneContext = Resources.FindObjectsOfTypeAll<SceneContext>().First(sc => sc.gameObject.scene.name == "MainMenu");
+                sceneContext.OnPostInstall.AddListener(() =>
+                {
+                    AppConfigConfirmationModal.Create(sceneContext.Container, _updatedAppConfig);
+                });
             }
         }
 

@@ -36,10 +36,9 @@ namespace DynamicOpenVR.BeatSaber
         private MainMenuViewController _mainMenuViewController;
         private JObject _appConfig;
 
-        public static AppConfigConfirmationModal Create(JObject updatedAppConfig)
+        public static AppConfigConfirmationModal Create(DiContainer container, JObject updatedAppConfig)
         {
-            DiContainer container = Resources.FindObjectsOfTypeAll<SceneContext>().First(sc => sc.gameObject.scene.name == "MainMenu").Container;
-            GameObject modalViewObject = container.InstantiatePrefab(container.Resolve<GameplaySetupViewController>().transform.Find("ColorsOverrideSettings/Settings/Detail/ColorSchemeDropDown/DropdownTableView").gameObject);
+            GameObject modalViewObject = container.InstantiatePrefab(container.Resolve<SettingsNavigationController>().transform.Find("OtherSettings/Content/LanguageDropdown/SimpleTextDropDown/DropdownTableView").gameObject);
             modalViewObject.name = "DynamicOpenVR Modal";
 
             DestroyImmediate(modalViewObject.GetComponent<TableView>());
