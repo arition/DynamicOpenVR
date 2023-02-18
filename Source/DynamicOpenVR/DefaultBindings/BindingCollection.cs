@@ -17,19 +17,36 @@
 // </copyright>
 
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace DynamicOpenVR.DefaultBindings
 {
     internal class BindingCollection
     {
-        public List<SourceBinding> sources { get; set; } = new List<SourceBinding>();
+#pragma warning disable IDE0044, IDE0051, CS0169
+        [JsonExtensionData]
+        private IDictionary<string, JToken> _properties;
+#pragma warning restore IDE0044, IDE0051, CS0169
 
-        public List<HapticBinding> haptics { get; set; } = new List<HapticBinding>();
+        public List<JObject> sources { get; set; } = new List<JObject>();
 
-        public List<PoseBinding> poses { get; set; } = new List<PoseBinding>();
+        public List<JObject> haptics { get; set; } = new List<JObject>();
 
-        public List<SkeletonBinding> skeleton { get; set; } = new List<SkeletonBinding>();
+        public List<JObject> poses { get; set; } = new List<JObject>();
 
-        public List<ChordBinding> chords { get; set; } = new List<ChordBinding>();
+        public List<JObject> skeleton { get; set; } = new List<JObject>();
+
+        public List<JObject> chords { get; set; } = new List<JObject>();
+
+        public bool ShouldSerializeSources() => sources.Count > 0;
+
+        public bool ShouldSerializeHaptics() => haptics.Count > 0;
+
+        public bool ShouldSerializePoses() => poses.Count > 0;
+
+        public bool ShouldSerializeSkeleton() => skeleton.Count > 0;
+
+        public bool ShouldSerializeChords() => chords.Count > 0;
     }
 }

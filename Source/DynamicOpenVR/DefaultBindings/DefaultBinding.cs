@@ -17,11 +17,18 @@
 // </copyright>
 
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace DynamicOpenVR.DefaultBindings
 {
     internal class DefaultBinding
     {
+#pragma warning disable IDE0044, IDE0051, CS0169
+        [JsonExtensionData]
+        private IDictionary<string, JToken> _properties;
+#pragma warning restore IDE0044, IDE0051, CS0169
+
         public uint actionManifestVersion { get; set; }
 
         public string name { get; set; }
@@ -32,6 +39,6 @@ namespace DynamicOpenVR.DefaultBindings
 
         public string category { get; set; }
 
-        public Dictionary<string, BindingCollection> bindings { get; set; }
+        public IDictionary<string, BindingCollection> bindings { get; set; }
     }
 }

@@ -3,12 +3,12 @@
   <PropertyGroup>
     <RootNamespace>DynamicOpenVR</RootNamespace>
     <AssemblyName>DynamicOpenVR</AssemblyName>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <PathMap>$(MSBuildProjectDirectory)=$(MSBuildProjectName)</PathMap>
-    <DefineConstants>UNITY_5_3_OR_NEWER</DefineConstants>
+    <DefineConstants>UNITY_5_3_OR_NEWER;MONO</DefineConstants>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <LangVersion>10</LangVersion>
+    <TargetFramework>net472</TargetFramework>
+    <LibrariesDir>$(SolutionDir)..\Libraries\Mono\</LibrariesDir>
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration) == Release">
     <DebugType>none</DebugType>
@@ -16,19 +16,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\Libraries\Newtonsoft.Json.dll</HintPath>
+      <HintPath>$(LibrariesDir)\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\..\Libraries\UnityEngine.dll</HintPath>
+      <HintPath>$(LibrariesDir)\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\..\Libraries\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>$(LibrariesDir)\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.VRModule">
-      <HintPath>..\..\Libraries\UnityEngine.VRModule.dll</HintPath>
+      <HintPath>$(LibrariesDir)\UnityEngine.VRModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.XRModule">
-      <HintPath>..\..\Libraries\UnityEngine.XRModule.dll</HintPath>
+      <HintPath>$(LibrariesDir)\UnityEngine.XRModule.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -40,7 +40,7 @@
       <ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)" />
     </ItemGroup>
   </Target>
-  <Target Name="Organize" AfterTargets="AfterBuild">
+  <Target Name="Organize" AfterTargets="AfterBuild">    
     <ItemGroup>
       <CopyToOutput Include="$(ProjectDir)..\..\Packaging\DynamicOpenVR\**\*.*" />
     </ItemGroup>
@@ -56,13 +56,6 @@
 
     <!-- copy static files -->
     <Copy SourceFiles="@(CopyToOutput)" DestinationFiles="@(CopyToOutput->'$(PublishDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
-  </Target>
-  <Target Name="CopyToBeatSaberFolder" AfterTargets="AfterBuild" Condition="$(BeatSaberDir) != ''">
-    <ItemGroup>
-      <CopyToBeatSaberFolder Include="$(PublishDir)**\*.*" />
-    </ItemGroup>
-    
-    <Copy SourceFiles="@(CopyToBeatSaberFolder)" DestinationFiles="@(CopyToBeatSaberFolder->'$(BeatSaberDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
   <ItemGroup>
     <PackageReference Include="IsExternalInit" Version="1.0.3">

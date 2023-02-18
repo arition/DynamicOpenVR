@@ -27,9 +27,9 @@ namespace DynamicOpenVR
     {
         public static bool isInitialized { get; private set; }
 
-        public static void Init()
+        public static void Init(bool checkLoadedDevice = true)
         {
-            if (!string.Equals(XRSettings.loadedDeviceName, "OpenVR", StringComparison.InvariantCultureIgnoreCase))
+            if (checkLoadedDevice && !string.Equals(XRSettings.loadedDeviceName, "OpenVR", StringComparison.InvariantCultureIgnoreCase))
             {
                 throw new OpenVRInitException($"OpenVR is not the selected VR SDK ({XRSettings.loadedDeviceName})");
             }

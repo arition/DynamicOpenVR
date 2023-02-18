@@ -36,13 +36,14 @@ namespace DynamicOpenVR
         {
             get
             {
-                // check for null since we don't want to create another object if the current one is marked for destruction
-                if (_instance == null)
+                // check for actual null reference since we don't want to create another object if the current one is marked for destruction
+                if (_instance is null)
                 {
                     Logger.Info($"Creating instance of {nameof(OpenVREventHandler)}");
 
                     var go = new GameObject(nameof(OpenVREventHandler));
                     DontDestroyOnLoad(go);
+                    go.hideFlags = HideFlags.HideAndDontSave;
                     _instance = go.AddComponent<OpenVREventHandler>();
                 }
 

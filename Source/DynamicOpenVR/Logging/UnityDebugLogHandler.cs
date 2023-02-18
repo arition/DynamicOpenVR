@@ -22,37 +22,37 @@ namespace DynamicOpenVR.Logging
     {
         public void Trace(object message)
         {
-            UnityEngine.Debug.Log(message);
+            UnityEngine.Debug.Log(message?.ToString());
         }
 
         public void Debug(object message)
         {
-            UnityEngine.Debug.Log(message);
+            UnityEngine.Debug.Log(message?.ToString());
         }
 
         public void Info(object message)
         {
-            UnityEngine.Debug.Log(message);
+            UnityEngine.Debug.Log(message?.ToString());
         }
 
         public void Notice(object message)
         {
-            UnityEngine.Debug.Log(message);
+            UnityEngine.Debug.Log(message?.ToString());
         }
 
         public void Warn(object message)
         {
-            UnityEngine.Debug.LogWarning(message);
+            UnityEngine.Debug.LogWarning(message?.ToString());
         }
 
         public void Error(object message)
         {
-            UnityEngine.Debug.LogError(message);
+            UnityEngine.Debug.LogError(message?.ToString());
         }
 
         public void Critical(object message)
         {
-            UnityEngine.Debug.LogError(message);
+            UnityEngine.Debug.LogError(message?.ToString());
         }
     }
 }

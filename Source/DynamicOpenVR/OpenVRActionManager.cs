@@ -44,21 +44,25 @@ namespace DynamicOpenVR
             {
                 NamingStrategy = new SnakeCaseNamingStrategy(),
             },
+            Formatting = Formatting.Indented,
+            NullValueHandling = NullValueHandling.Ignore,
         };
 
         private string _actionManifestPath;
+        private string _gameName;
 
         public static OpenVRActionManager instance
         {
             get
             {
-                // check for null since we don't want to create another object if the current one is marked for destruction
-                if (_instance == null)
+                // check for actual null reference since we don't want to create another object if the current one is marked for destruction
+                if (_instance is null)
                 {
                     Logger.Info($"Creating instance of {nameof(OpenVRActionManager)}");
 
                     var go = new GameObject(nameof(OpenVRActionManager));
                     DontDestroyOnLoad(go);
+                    go.hideFlags = HideFlags.HideAndDontSave;
                     _instance = go.AddComponent<OpenVRActionManager>();
                 }
 
@@ -81,7 +85,7 @@ namespace DynamicOpenVR
 
         public bool initialized { get; private set; }
 
-        public void Initialize(string actionManifestPath)
+        public void Initialize(string gameName, string actionManifestPath)
         {
             if (initialized)
             {
@@ -91,6 +95,7 @@ namespace DynamicOpenVR
             Logger.Info($"Initializing {nameof(OpenVRActionManager)}");
 
             _actionManifestPath = actionManifestPath;
+            _gameName = gameName;
 
             CombineAndWriteManifest();
 
@@ -118,7 +123,7 @@ namespace DynamicOpenVR
                 return; // do nothing until initialized
             }
 
-            if (_actionSetHandles != null)
+            if (_actionSetHandles.Count > 0)
             {
                 OpenVRFacade.UpdateActionState(_actionSetHandles);
             }
@@ -208,7 +213,7 @@ namespace DynamicOpenVR
                     using (var reader = new StreamReader(actionFile))
                     {
                         string data = reader.ReadToEnd();
-                        actionManifests.Add(JsonConvert.DeserializeObject<ActionManifest>(data));
+                        actionManifests.Add(JsonConvert.DeserializeObject<ActionManifest>(data, _jsonSerializerSettings));
                     }
                 }
                 catch (Exception ex)
@@ -259,7 +264,7 @@ namespace DynamicOpenVR
 
             using (var writer = new StreamWriter(_actionManifestPath))
             {
-                writer.WriteLine(JsonConvert.SerializeObject(manifest, Formatting.Indented));
+                writer.WriteLine(JsonConvert.SerializeObject(manifest, _jsonSerializerSettings));
             }
         }
 
@@ -348,7 +353,7 @@ namespace DynamicOpenVR
 
                     using (var reader = new StreamReader(bindingFile))
                     {
-                        defaultBindings.Add(JsonConvert.DeserializeObject<DefaultBinding>(reader.ReadToEnd()));
+                        defaultBindings.Add(JsonConvert.DeserializeObject<DefaultBinding>(reader.ReadToEnd(), _jsonSerializerSettings));
                     }
                 }
                 catch (Exception ex)
@@ -364,8 +369,8 @@ namespace DynamicOpenVR
                 var defaultBinding = new DefaultBinding
                 {
                     actionManifestVersion = manifestVersion,
-                    name = "Default Beat Saber Bindings",
-                    description = "Action bindings for Beat Saber.",
+                    name = $"Default {_gameName} Bindings",
+                    description = $"Action bindings for {_gameName}.",
                     controllerType = controllerType,
                     category = "steamvr_input",
                     bindings = MergeBindings(defaultBindings.Where(b => b.controllerType == controllerType)),
@@ -374,9 +379,9 @@ namespace DynamicOpenVR
                 string fileName = $"default_bindings_{defaultBinding.controllerType}.json";
                 combinedBindings.Add(new ManifestDefaultBinding { controllerType = controllerType, bindingUrl = fileName });
 
-                using (var writer = new StreamWriter(Path.Combine("DynamicOpenVR", fileName)))
+                using (var writer = new StreamWriter(Path.Combine(Path.GetDirectoryName(_actionManifestPath), fileName)))
                 {
-                    writer.WriteLine(JsonConvert.SerializeObject(defaultBinding, Formatting.Indented));
+                    writer.WriteLine(JsonConvert.SerializeObject(defaultBinding, _jsonSerializerSettings));
                 }
             }
 

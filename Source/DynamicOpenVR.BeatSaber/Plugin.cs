@@ -106,7 +106,7 @@ namespace DynamicOpenVR.BeatSaber
             RegisterActionSet();
             ApplyHarmonyPatches();
 
-            OpenVRActionManager.instance.Initialize(kActionManifestPath);
+            OpenVRActionManager.instance.Initialize("Beat Saber", kActionManifestPath);
 
             SceneManager.sceneLoaded += OnSceneLoaded;
             OpenVREventHandler.instance.eventTriggered += OnOpenVREventTriggered;
