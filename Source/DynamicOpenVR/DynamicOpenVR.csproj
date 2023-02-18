@@ -3,40 +3,11 @@
   <PropertyGroup>
     <RootNamespace>DynamicOpenVR</RootNamespace>
     <AssemblyName>DynamicOpenVR</AssemblyName>
-    <PathMap>$(MSBuildProjectDirectory)=$(MSBuildProjectName)</PathMap>
     <DefineConstants>UNITY_5_3_OR_NEWER;MONO</DefineConstants>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <LangVersion>10</LangVersion>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <LibrariesDir>$(SolutionDir)..\Libraries\Mono\</LibrariesDir>
   </PropertyGroup>
-  <PropertyGroup Condition="$(Configuration) == Release">
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>$(LibrariesDir)\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine">
-      <HintPath>$(LibrariesDir)\UnityEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.CoreModule">
-      <HintPath>$(LibrariesDir)\UnityEngine.CoreModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.VRModule">
-      <HintPath>$(LibrariesDir)\UnityEngine.VRModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.XRModule">
-      <HintPath>$(LibrariesDir)\UnityEngine.XRModule.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="DynamicOpenVR.csproj.user" />
-  </ItemGroup>
-  <ItemGroup>
-    <AdditionalFiles Include="stylecop.json" />
-  </ItemGroup>
+  <Import Project="Common.props" />
   <Target Name="ClearReferenceCopyLocalPaths" AfterTargets="ResolveAssemblyReferences">
     <ItemGroup>
       <!-- prevent any referenced DLLs from being copied to the output folder -->
@@ -67,22 +38,4 @@
 
     <Copy SourceFiles="@(CopyToBeatSaberFolder)" DestinationFiles="@(CopyToBeatSaberFolder->'$(BeatSaberDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
-  <ItemGroup>
-    <PackageReference Include="IsExternalInit" Version="1.0.3">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeStyle" Version="4.3.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Unity.Analyzers" Version="1.15.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.435">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
 </Project>

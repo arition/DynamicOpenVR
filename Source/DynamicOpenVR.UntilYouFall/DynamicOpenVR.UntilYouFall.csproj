@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
+    <Version>0.4.0</Version>
+    <Copyright>Copyright © Nicolas Gnyra 2019-2023</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
@@ -57,13 +58,13 @@
     
     <!-- create Plugins folder and move plugin DLL/PDB inside -->
     <MakeDir Directories="$(PublishDir)" />
-    
-    <Copy SourceFiles="$(TargetDir)DynamicOpenVR.dll" DestinationFolder="$(PublishDir)" />
-    <Copy SourceFiles="$(TargetDir)DynamicOpenVR.pdb" DestinationFolder="$(PublishDir)" Condition="$(DebugType) != 'none'" />
-    <Copy SourceFiles="$(TargetDir)DynamicOpenVR.xml" DestinationFolder="$(PublishDir)" Condition="$(DebugType) != 'none'" />
+
+    <Copy SourceFiles="$(TargetDir)DynamicOpenVR.IL2CPP.dll" DestinationFolder="$(PublishDir)" />
+    <Copy SourceFiles="$(TargetDir)DynamicOpenVR.IL2CPP.pdb" DestinationFolder="$(PublishDir)" Condition="Exists('$(TargetDir)DynamicOpenVR.IL2CPP.pdb')" />
+    <Copy SourceFiles="$(TargetDir)DynamicOpenVR.IL2CPP.xml" DestinationFolder="$(PublishDir)" Condition="Exists('$(TargetDir)DynamicOpenVR.IL2CPP.xml')" />
 
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(PublishDir)" />
-    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(PublishDir)" Condition="$(DebugType) != 'none'" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(PublishDir)" Condition="Exists('$(TargetDir)$(TargetName).pdb')" />
 
     <!-- copy static files -->
     <Copy SourceFiles="@(CopyToOutput)" DestinationFiles="@(CopyToOutput->'$(PublishDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
@@ -76,5 +77,4 @@
     
     <Copy SourceFiles="@(CopyToGameDir)" DestinationFiles="@(CopyToGameDir->'$(GameDir)\BepInEx\plugins\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
-
 </Project>

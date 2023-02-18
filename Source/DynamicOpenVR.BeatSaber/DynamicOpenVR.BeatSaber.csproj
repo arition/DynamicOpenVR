@@ -4,12 +4,13 @@
     <RootNamespace>DynamicOpenVR.BeatSaber</RootNamespace>
     <AssemblyName>DynamicOpenVR.BeatSaber</AssemblyName>
     <TargetFramework>net472</TargetFramework>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AutomatedBuild>false</AutomatedBuild>
     <PathMap>$(MSBuildProjectDirectory)=$(MSBuildProjectName)</PathMap>
     <SteamExecutable>C:\Program Files (x86)\Steam\steam.exe</SteamExecutable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <LangVersion>10</LangVersion>
+    <Version>0.4.0</Version>
+    <Copyright>Copyright © Nicolas Gnyra 2019-2023</Copyright>
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration) == Release">
     <DebugType>none</DebugType>
