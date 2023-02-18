@@ -1,6 +1,6 @@
-﻿// <copyright file="ManifestActionSet.cs" company="Nicolas Gnyra">
+// <copyright file="ActionManifest.cs" company="Nicolas Gnyra">
 // DynamicOpenVR - Unity scripts to allow dynamic creation of OpenVR actions at runtime.
-// Copyright © 2019-2021 Nicolas Gnyra
+// Copyright � 2019-2021 Nicolas Gnyra
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published
@@ -16,12 +16,20 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // </copyright>
 
-namespace DynamicOpenVR.Manifest
-{
-    internal class ManifestActionSet
-    {
-        public string name { get; set; }
+using System.Collections.Generic;
 
-        public string usage { get; set; }
+namespace DynamicOpenVR.SteamVR.Actions
+{
+    internal class ActionManifest
+    {
+        public uint version { get; set; } = 0;
+
+        public List<ManifestAction> actions { get; set; } = new();
+
+        public List<ManifestActionSet> actionSets { get; set; } = new();
+
+        public List<ManifestDefaultBinding> defaultBindings { get; set; } = new();
+
+        public List<Dictionary<string, string>> localization { get; set; } = new();
     }
 }

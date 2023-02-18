@@ -17,15 +17,18 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using DynamicOpenVR.BeatSaber.InputCollections;
 using DynamicOpenVR.IO;
+using DynamicOpenVR.SteamVR;
+using DynamicOpenVR.SteamVR.VRManifest;
 using HarmonyLib;
 using IPA;
 using IPA.Utilities;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Zenject;
@@ -43,10 +46,20 @@ namespace DynamicOpenVR.BeatSaber
 
         private static readonly string kActionManifestPath = Path.Combine(UnityGame.InstallPath, "DynamicOpenVR", "action_manifest.json");
 
+        private static readonly JsonSerializerSettings kJsonSerializerSettings = new()
+        {
+            ContractResolver = new DefaultContractResolver
+            {
+                NamingStrategy = new SnakeCaseNamingStrategy(),
+            },
+            Formatting = Formatting.Indented,
+            NullValueHandling = NullValueHandling.Ignore,
+        };
+
         private readonly Logger _logger;
         private readonly Harmony _harmonyInstance;
 
-        private JObject _updatedAppConfig;
+        private AppConfig _updatedAppConfig;
 
         [Init]
         public Plugin(Logger logger)
@@ -119,20 +132,20 @@ namespace DynamicOpenVR.BeatSaber
 
         private void AddManifestToSteamConfig()
         {
-            JObject beatSaberManifest = ReadBeatSaberManifest(kGlobalManifestPath);
+            VRApplication beatSaberManifest = ReadBeatSaberManifest(kGlobalManifestPath);
 
-            beatSaberManifest["action_manifest_path"] = kActionManifestPath;
+            beatSaberManifest.actionManifestPath = kActionManifestPath;
 
-            var vrManifest = new JObject
+            var vrManifest = new VRApplicationManifest
             {
-                { "applications", new JArray { beatSaberManifest } },
+                applications = new[] { beatSaberManifest },
             };
 
             WriteBeatSaberManifest(kManifestPath, vrManifest);
 
-            JObject appConfig = ReadAppConfig(kAppConfigPath);
-            JArray manifestPaths = appConfig["manifest_paths"].Value<JArray>();
-            var existing = manifestPaths.Where(p => string.Equals(p.Value<string>(), kManifestPath, StringComparison.InvariantCultureIgnoreCase)).ToList();
+            AppConfig appConfig = ReadAppConfig(kAppConfigPath);
+            List<string> manifestPaths = appConfig.manifestPaths;
+            var existing = manifestPaths.Where(p => string.Equals(p, kManifestPath, StringComparison.InvariantCultureIgnoreCase)).ToList();
             bool updated = false;
 
             // only rewrite if path isn't in list already or is not at the top
@@ -140,7 +153,7 @@ namespace DynamicOpenVR.BeatSaber
             {
                 _logger.Info($"Adding '{kManifestPath}' to app config");
 
-                foreach (JToken token in existing)
+                foreach (string token in existing)
                 {
                     manifestPaths.Remove(token);
                 }
@@ -151,10 +164,10 @@ namespace DynamicOpenVR.BeatSaber
             }
             else
             {
-                _logger.Info("Manifest is already in app config");
+                _logger.Trace("Manifest is already in app config");
             }
 
-            if (!manifestPaths.Any(s => string.Equals(s.Value<string>(), kGlobalManifestPath, StringComparison.InvariantCultureIgnoreCase)))
+            if (!manifestPaths.Any(p => string.Equals(p, kGlobalManifestPath, StringComparison.InvariantCultureIgnoreCase)))
             {
                 _logger.Info($"Adding '{kGlobalManifestPath}' to app config");
 
@@ -173,67 +186,52 @@ namespace DynamicOpenVR.BeatSaber
             }
         }
 
-        private JObject ReadBeatSaberManifest(string globalManifestPath)
+        private VRApplication ReadBeatSaberManifest(string globalManifestPath)
         {
             if (!File.Exists(globalManifestPath))
             {
                 throw new FileNotFoundException($"Could not find file '{globalManifestPath}'");
             }
 
-            JObject beatSaberManifest;
+            VRApplication beatSaberManifest;
 
             _logger.Trace($"Reading '{globalManifestPath}'");
 
             using (var reader = new StreamReader(globalManifestPath))
             {
-                JObject globalManifest = JsonConvert.DeserializeObject<JObject>(reader.ReadToEnd());
-                beatSaberManifest = globalManifest["applications"]?.Value<JArray>()?.FirstOrDefault(a => a["app_key"]?.Value<string>() == "steam.app.620980")?.Value<JObject>();
+                VRApplicationManifest globalManifest = JsonConvert.DeserializeObject<VRApplicationManifest>(reader.ReadToEnd(), kJsonSerializerSettings);
+                beatSaberManifest = globalManifest.applications?.FirstOrDefault(a => a.appKey == "steam.app.620980");
             }
 
             return beatSaberManifest ?? throw new Exception($"Beat Saber manifest not found in '{globalManifestPath}'");
         }
 
-        private JObject ReadAppConfig(string configPath)
+        private AppConfig ReadAppConfig(string configPath)
         {
-            var appConfig = new JObject();
-
             if (!File.Exists(configPath))
             {
                 _logger.Warn($"Could not find file '{configPath}'");
-
-                appConfig.Add("manifest_paths", new JArray());
-
-                return appConfig;
+                return new AppConfig();
             }
 
             _logger.Trace($"Reading '{configPath}'");
 
+            AppConfig appConfig;
+
             using (var reader = new StreamReader(configPath))
             {
-                appConfig = JsonConvert.DeserializeObject<JObject>(reader.ReadToEnd());
-            }
-
-            if (appConfig == null)
-            {
-                _logger.Warn("File is empty");
-                appConfig = new JObject();
-            }
-
-            if (!appConfig.ContainsKey("manifest_paths"))
-            {
-                _logger.Warn("manifest_paths is missing");
-                appConfig.Add("manifest_paths", new JArray());
+                appConfig = JsonConvert.DeserializeObject<AppConfig>(reader.ReadToEnd(), kJsonSerializerSettings) ?? new AppConfig();
             }
 
             return appConfig;
         }
 
-        private void WriteBeatSaberManifest(string manifestPath, JObject beatSaberManifest)
+        private void WriteBeatSaberManifest(string manifestPath, VRApplicationManifest beatSaberManifest)
         {
             _logger.Info($"Writing manifest to '{manifestPath}'");
 
             using StreamWriter writer = new(manifestPath);
-            writer.Write(JsonConvert.SerializeObject(beatSaberManifest, Formatting.Indented));
+            writer.Write(JsonConvert.SerializeObject(beatSaberManifest, kJsonSerializerSettings));
         }
 
         private void RegisterActionSet()

@@ -1,6 +1,6 @@
-// <copyright file="ActionManifest.cs" company="Nicolas Gnyra">
+﻿// <copyright file="AppConfig.cs" company="Nicolas Gnyra">
 // DynamicOpenVR - Unity scripts to allow dynamic creation of OpenVR actions at runtime.
-// Copyright � 2019-2021 Nicolas Gnyra
+// Copyright © 2019-2021 Nicolas Gnyra
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published
@@ -17,19 +17,18 @@
 // </copyright>
 
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
-namespace DynamicOpenVR.Manifest
+namespace DynamicOpenVR.SteamVR
 {
-    internal class ActionManifest
+    public record AppConfig
     {
-        public uint version { get; set; } = 0;
+#pragma warning disable IDE0044, IDE0051, CS0169
+        [JsonExtensionData]
+        private IDictionary<string, JToken> _properties;
+#pragma warning restore IDE0044, IDE0051, CS0169
 
-        public List<ManifestAction> actions { get; set; } = new List<ManifestAction>();
-
-        public List<ManifestActionSet> actionSets { get; set; } = new List<ManifestActionSet>();
-
-        public List<ManifestDefaultBinding> defaultBindings { get; set; } = new List<ManifestDefaultBinding>();
-
-        public List<Dictionary<string, string>> localization { get; set; } = new List<Dictionary<string, string>>();
+        public List<string> manifestPaths { get; } = new();
     }
 }

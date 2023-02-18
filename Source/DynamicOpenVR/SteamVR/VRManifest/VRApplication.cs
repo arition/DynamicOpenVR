@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultBinding.cs" company="Nicolas Gnyra">
+﻿// <copyright file="VRApplication.cs" company="Nicolas Gnyra">
 // DynamicOpenVR - Unity scripts to allow dynamic creation of OpenVR actions at runtime.
 // Copyright © 2019-2021 Nicolas Gnyra
 //
@@ -20,25 +20,29 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace DynamicOpenVR.DefaultBindings
+namespace DynamicOpenVR.SteamVR.VRManifest
 {
-    internal class DefaultBinding
+    public record VRApplication
     {
 #pragma warning disable IDE0044, IDE0051, CS0169
         [JsonExtensionData]
         private IDictionary<string, JToken> _properties;
 #pragma warning restore IDE0044, IDE0051, CS0169
 
-        public uint actionManifestVersion { get; set; }
+        public string appKey { get; set; }
 
-        public string name { get; set; }
+        public string launchType { get; set; }
 
-        public string description { get; set; }
+        public Dictionary<string, Dictionary<string, string>> strings { get; }
 
-        public string controllerType { get; set; }
+        public string imagePath { get; set; }
 
-        public string category { get; set; }
+        public List<DefaultBinding> defaultBindings { get; } = new();
 
-        public IDictionary<string, BindingCollection> bindings { get; set; }
+        public string lastPlayedTime { get; set; }
+
+        public string url { get; set; }
+
+        public string actionManifestPath { get; set; }
     }
 }

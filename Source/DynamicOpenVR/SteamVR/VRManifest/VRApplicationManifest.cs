@@ -1,4 +1,4 @@
-﻿// <copyright file="BindingCollection.cs" company="Nicolas Gnyra">
+﻿// <copyright file="VRApplicationManifest.cs" company="Nicolas Gnyra">
 // DynamicOpenVR - Unity scripts to allow dynamic creation of OpenVR actions at runtime.
 // Copyright © 2019-2021 Nicolas Gnyra
 //
@@ -20,33 +20,15 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace DynamicOpenVR.DefaultBindings
+namespace DynamicOpenVR.SteamVR.VRManifest
 {
-    internal class BindingCollection
+    public record VRApplicationManifest
     {
 #pragma warning disable IDE0044, IDE0051, CS0169
         [JsonExtensionData]
         private IDictionary<string, JToken> _properties;
 #pragma warning restore IDE0044, IDE0051, CS0169
 
-        public List<JObject> sources { get; set; } = new List<JObject>();
-
-        public List<JObject> haptics { get; set; } = new List<JObject>();
-
-        public List<JObject> poses { get; set; } = new List<JObject>();
-
-        public List<JObject> skeleton { get; set; } = new List<JObject>();
-
-        public List<JObject> chords { get; set; } = new List<JObject>();
-
-        public bool ShouldSerializeSources() => sources.Count > 0;
-
-        public bool ShouldSerializeHaptics() => haptics.Count > 0;
-
-        public bool ShouldSerializePoses() => poses.Count > 0;
-
-        public bool ShouldSerializeSkeleton() => skeleton.Count > 0;
-
-        public bool ShouldSerializeChords() => chords.Count > 0;
+        public VRApplication[] applications { get; set; }
     }
 }

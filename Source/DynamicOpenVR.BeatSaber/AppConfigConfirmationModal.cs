@@ -21,9 +21,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using DynamicOpenVR.SteamVR;
 using HMUI;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -34,9 +34,9 @@ namespace DynamicOpenVR.BeatSaber
     {
         private ModalView _modalView;
         private MainMenuViewController _mainMenuViewController;
-        private JObject _appConfig;
+        private AppConfig _appConfig;
 
-        public static AppConfigConfirmationModal Create(DiContainer container, JObject updatedAppConfig)
+        public static AppConfigConfirmationModal Create(DiContainer container, AppConfig updatedAppConfig)
         {
             GameObject modalViewObject = container.InstantiatePrefab(container.Resolve<SettingsNavigationController>().transform.Find("OtherSettings/Content/LanguageDropdown/SimpleTextDropDown/DropdownTableView").gameObject);
             modalViewObject.name = "DynamicOpenVR Modal";
@@ -192,7 +192,7 @@ namespace DynamicOpenVR.BeatSaber
             _modalView.Hide(true);
         }
 
-        private void WriteAppConfig(string configPath, JObject appConfig)
+        private void WriteAppConfig(string configPath, AppConfig appConfig)
         {
             if (appConfig == null)
             {
