@@ -19,7 +19,6 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using DynamicOpenVR.BeatSaber.InputCollections;
 using DynamicOpenVR.IO;
 using HarmonyLib;
@@ -29,7 +28,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Valve.VR;
 using Zenject;
 using Logger = IPA.Logging.Logger;
 
@@ -48,7 +46,6 @@ namespace DynamicOpenVR.BeatSaber
         private readonly Logger _logger;
         private readonly Harmony _harmonyInstance;
 
-        private OpenVRHelper _openVRHelper;
         private JObject _updatedAppConfig;
 
         [Init]
@@ -99,7 +96,6 @@ namespace DynamicOpenVR.BeatSaber
             OpenVRActionManager.instance.Initialize("Beat Saber", kActionManifestPath);
 
             SceneManager.sceneLoaded += OnSceneLoaded;
-            OpenVREventHandler.instance.eventTriggered += OnOpenVREventTriggered;
         }
 
         [OnExit]
@@ -111,71 +107,13 @@ namespace DynamicOpenVR.BeatSaber
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            if (scene.name == "PCInit")
-            {
-                _openVRHelper = Resources.FindObjectsOfTypeAll<OpenVRHelper>().First();
-            }
-            else if (scene.name == "MainMenu" && _updatedAppConfig != null)
+            if (scene.name == "MainMenu" && _updatedAppConfig != null)
             {
                 SceneContext sceneContext = Resources.FindObjectsOfTypeAll<SceneContext>().First(sc => sc.gameObject.scene.name == "MainMenu");
                 sceneContext.OnPostInstall.AddListener(() =>
                 {
                     AppConfigConfirmationModal.Create(sceneContext.Container, _updatedAppConfig);
                 });
-            }
-        }
-
-        private void OnOpenVREventTriggered(VREvent_t evt)
-        {
-            if (_openVRHelper == null)
-            {
-                return;
-            }
-
-            var eventType = (EVREventType)evt.eventType;
-
-            if (eventType == EVREventType.VREvent_InputFocusReleased && evt.data.process.pid == 0)
-            {
-                InvokeEvent(_openVRHelper, nameof(_openVRHelper.inputFocusWasReleasedEvent));
-                _openVRHelper.EnableEventSystem();
-            }
-
-            if (eventType == EVREventType.VREvent_InputFocusCaptured && evt.data.process.oldPid == 0)
-            {
-                InvokeEvent(_openVRHelper, nameof(_openVRHelper.inputFocusWasCapturedEvent));
-                _openVRHelper.DisableEventSystem();
-            }
-
-            if (eventType == EVREventType.VREvent_DashboardActivated)
-            {
-                InvokeEvent(_openVRHelper, nameof(_openVRHelper.inputFocusWasCapturedEvent));
-                _openVRHelper.DisableEventSystem();
-            }
-
-            if (eventType == EVREventType.VREvent_DashboardDeactivated)
-            {
-                InvokeEvent(_openVRHelper, nameof(_openVRHelper.inputFocusWasReleasedEvent));
-                _openVRHelper.EnableEventSystem();
-            }
-
-            if (eventType == EVREventType.VREvent_Quit)
-            {
-                Application.Quit();
-            }
-        }
-
-        private void InvokeEvent<T>(T obj, string name, params object[] args)
-        {
-            var multicastDelegate = (MulticastDelegate)obj.GetType().GetField(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).GetValue(obj);
-
-            if (multicastDelegate == null)
-            {
-                return;
-            }
-
-            foreach (Delegate handler in multicastDelegate.GetInvocationList())
-            {
-                handler.Method.Invoke(handler.Target, args);
             }
         }
 
