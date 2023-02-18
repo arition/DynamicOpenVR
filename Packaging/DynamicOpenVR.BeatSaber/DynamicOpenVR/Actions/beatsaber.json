@@ -1,78 +1,237 @@
 {
-    "actions": [
-      {
-        "name": "/actions/main/in/lefttriggervalue",
-        "requirement": "mandatory",
-        "type": "vector1"
-      },
-      {
-        "name": "/actions/main/in/righttriggervalue",
-        "requirement": "mandatory",
-        "type": "vector1"
-      },
-      {
-        "name": "/actions/main/in/menu",
-        "requirement": "mandatory",
-        "type": "boolean"
-      },
-      {
-        "name": "/actions/main/out/leftslice",
-        "requirement": "suggested",
-        "type": "vibration"
-      },
-      {
-        "name": "/actions/main/out/rightslice",
-        "requirement": "suggested",
-        "type": "vibration"
-      },
-      {
-        "name": "/actions/main/in/lefthandpose",
-        "requirement": "mandatory",
-        "type": "pose"
-      },
-      {
-        "name": "/actions/main/in/righthandpose",
-        "requirement": "mandatory",
-        "type": "pose"
-      },
-      {
-        "name": "/actions/main/in/thumbstick",
-        "requirement": "mandatory",
-        "type": "vector2"
-      }
-    ],
-    "action_sets": [
-      {
-        "name": "/actions/main",
-        "usage": "leftright"
-      }
-    ],
-    "default_bindings": [
-      {
-        "controller_type": "knuckles",
-        "binding_url": "bindings_index_controller.json"
-      }
-    ],
-    "localization": [
-      {
-        "language_tag": "en_us",
-        "/actions/main": "Beat Saber",
-        "/actions/main/in/lefttriggervalue": "Left Trigger Pull",
-        "/actions/main/in/righttriggervalue": "Right Trigger Pull",
-        "/actions/main/in/menu": "Menu Button",
-        "/actions/main/out/leftslice": "Left Slice Haptic Feedback",
-        "/actions/main/out/rightslice": "Left Slice Haptic Feedback",
-        "/actions/main/in/lefthandpose": "Left Hand Pose",
-        "/actions/main/in/righthandpose": "Right Hand Pose",
-        "/actions/main/in/thumbstick": "Joystick Position"
-      },
-      {
-        "language_tag": "fr_fr",
-        "/actions/main/in/lefttriggervalue": "Gâchette gauche (tirer)",
-        "/actions/main/in/righttriggervalue": "Gâchette droite (tirer)",
-        "/actions/main/in/menu": "Bouton Menu",
-        "/actions/main/out/leftslice": "Retour haptique pour coupe de gauche",
-        "/actions/main/out/rightslice": "Retour haptique pour coupe de droite"
-      }
-    ]
-  }
+  "actions": [
+    {
+      "name": "/actions/main/in/lefttriggervalue",
+      "requirement": "mandatory",
+      "type": "vector1"
+    },
+    {
+      "name": "/actions/main/in/righttriggervalue",
+      "requirement": "mandatory",
+      "type": "vector1"
+    },
+    {
+      "name": "/actions/main/in/menu",
+      "requirement": "mandatory",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/main/out/leftslice",
+      "requirement": "suggested",
+      "type": "vibration"
+    },
+    {
+      "name": "/actions/main/out/rightslice",
+      "requirement": "suggested",
+      "type": "vibration"
+    },
+    {
+      "name": "/actions/main/in/lefthandpose",
+      "requirement": "mandatory",
+      "type": "pose"
+    },
+    {
+      "name": "/actions/main/in/righthandpose",
+      "requirement": "mandatory",
+      "type": "pose"
+    },
+    {
+      "name": "/actions/main/in/thumbstick",
+      "requirement": "mandatory",
+      "type": "vector2"
+    },
+    {
+      "name": "/actions/unity/in/left_pose",
+      "requirement": "mandatory",
+      "type": "pose"
+    },
+    {
+      "name": "/actions/unity/in/left_primary_button",
+      "requirement": "suggested",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/unity/in/left_primary_touch",
+      "requirement": "suggested",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/unity/in/left_secondary_button",
+      "requirement": "suggested",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/unity/in/left_secondary_touch",
+      "requirement": "suggested",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/unity/in/left_grip",
+      "requirement": "suggested",
+      "type": "vector1"
+    },
+    {
+      "name": "/actions/unity/in/left_grip_button",
+      "requirement": "mandatory",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/unity/in/left_trigger",
+      "requirement": "mandatory",
+      "type": "vector1"
+    },
+    {
+      "name": "/actions/unity/in/left_trigger_button",
+      "requirement": "mandatory",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/unity/in/left_menu_button",
+      "requirement": "suggested",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/unity/in/left_primary_2d_axis",
+      "requirement": "mandatory",
+      "type": "vector2"
+    },
+    {
+      "name": "/actions/unity/in/left_primary_2d_axis_click",
+      "requirement": "mandatory",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/unity/in/left_primary_2d_axis_touch",
+      "requirement": "suggested",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/unity/out/left_haptics",
+      "requirement": "mandatory",
+      "type": "vibration"
+    },
+    {
+      "name": "/actions/unity/in/right_pose",
+      "requirement": "mandatory",
+      "type": "pose"
+    },
+    {
+      "name": "/actions/unity/in/right_primary_button",
+      "requirement": "suggested",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/unity/in/right_primary_touch",
+      "requirement": "suggested",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/unity/in/right_secondary_button",
+      "requirement": "suggested",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/unity/in/right_secondary_touch",
+      "requirement": "suggested",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/unity/in/right_grip",
+      "requirement": "suggested",
+      "type": "vector1"
+    },
+    {
+      "name": "/actions/unity/in/right_grip_button",
+      "requirement": "mandatory",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/unity/in/right_trigger",
+      "requirement": "mandatory",
+      "type": "vector1"
+    },
+    {
+      "name": "/actions/unity/in/right_trigger_button",
+      "requirement": "mandatory",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/unity/in/right_menu_button",
+      "requirement": "suggested",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/unity/in/right_primary_2d_axis",
+      "requirement": "mandatory",
+      "type": "vector2"
+    },
+    {
+      "name": "/actions/unity/in/right_primary_2d_axis_click",
+      "requirement": "mandatory",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/unity/in/right_primary_2d_axis_touch",
+      "requirement": "suggested",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/unity/out/right_haptics",
+      "requirement": "mandatory",
+      "type": "vibration"
+    }
+  ],
+  "action_sets": [
+    {
+      "name": "/actions/main",
+      "usage": "leftright"
+    },
+    {
+      "name": "/actions/unity",
+      "usage": "leftright"
+    }
+  ],
+  "localization": [
+    {
+      "language_tag": "en_us",
+      "/actions/main": "Beat Saber",
+      "/actions/main/in/lefttriggervalue": "Left Trigger Pull",
+      "/actions/main/in/righttriggervalue": "Right Trigger Pull",
+      "/actions/main/in/menu": "Menu Button",
+      "/actions/main/out/leftslice": "Left Slice Haptic Feedback",
+      "/actions/main/out/rightslice": "Left Slice Haptic Feedback",
+      "/actions/main/in/lefthandpose": "Left Hand Pose",
+      "/actions/main/in/righthandpose": "Right Hand Pose",
+      "/actions/main/in/thumbstick": "Joystick Position",
+      "/actions/unity": "Unity XR Input",
+      "/actions/unity/in/left_pose": "Left Controller Pose",
+      "/actions/unity/in/left_primary_button": "Left Primary Button",
+      "/actions/unity/in/left_primary_touch": "Left Primary Touch",
+      "/actions/unity/in/left_secondary_button": "Left Secondary Button",
+      "/actions/unity/in/left_secondary_touch": "Left Secondary Touch",
+      "/actions/unity/in/left_grip": "Left Grip",
+      "/actions/unity/in/left_grip_button": "Left Grip Button",
+      "/actions/unity/in/left_trigger": "Left Trigger",
+      "/actions/unity/in/left_trigger_button": "Left Trigger Button",
+      "/actions/unity/in/left_menu_button": "Left Menu Button",
+      "/actions/unity/in/left_primary_2d_axis": "Left Primary 2D Axis",
+      "/actions/unity/in/left_primary_2d_axis_click": "Left Primary 2D Axis Click",
+      "/actions/unity/in/left_primary_2d_axis_touch": "Left Primary 2D Axis Touch",
+      "/actions/unity/out/left_haptics": "Left Haptic Vibration",
+      "/actions/unity/in/right_pose": "Right Controller Pose",
+      "/actions/unity/in/right_primary_button": "Right Primary Button",
+      "/actions/unity/in/right_primary_touch": "Right Primary Touch",
+      "/actions/unity/in/right_secondary_button": "Right Secondary Button",
+      "/actions/unity/in/right_secondary_touch": "Right Secondary Touch",
+      "/actions/unity/in/right_grip": "Right Grip",
+      "/actions/unity/in/right_grip_button": "Right Grip Button",
+      "/actions/unity/in/right_trigger": "Right Trigger",
+      "/actions/unity/in/right_trigger_button": "Right Trigger Button",
+      "/actions/unity/in/right_menu_button": "Right Menu Button",
+      "/actions/unity/in/right_primary_2d_axis": "Right Primary 2D Axis",
+      "/actions/unity/in/right_primary_2d_axis_click": "Right Primary 2D Axis Click",
+      "/actions/unity/in/right_primary_2d_axis_touch": "Right Primary 2D Axis Touch",
+      "/actions/unity/out/right_haptics": "Right Haptic Vibration"
+    }
+  ]
+}

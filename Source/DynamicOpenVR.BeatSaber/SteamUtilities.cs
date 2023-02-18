@@ -33,7 +33,7 @@ namespace DynamicOpenVR
 
             if (!string.IsNullOrEmpty(steamPath) && Directory.Exists(steamPath))
             {
-                return steamPath.Replace('/', '\\');
+                return steamPath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
             }
 
             Process steamProcess = Process.GetProcessesByName("Steam").FirstOrDefault();

@@ -32,6 +32,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="DynamicOpenVR.csproj.user" />
+  </ItemGroup>
+  <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
   <Target Name="ClearReferenceCopyLocalPaths" AfterTargets="ResolveAssemblyReferences">
@@ -51,11 +54,18 @@
     <!-- create Libs folder and move DLL/PDB inside -->
     <MakeDir Directories="$(PublishDir)Libs" />
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(PublishDir)Libs" />
-    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(PublishDir)Libs" Condition="$(DebugType) == 'portable'" />
-    <Copy SourceFiles="$(TargetDir)$(TargetName).xml" DestinationFolder="$(PublishDir)Libs" Condition="$(DebugType) == 'portable'" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(PublishDir)Libs" Condition="$(DebugType) != 'none'" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).xml" DestinationFolder="$(PublishDir)Libs" Condition="$(DebugType) != 'none'" />
 
     <!-- copy static files -->
     <Copy SourceFiles="@(CopyToOutput)" DestinationFiles="@(CopyToOutput->'$(PublishDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>
+  <Target Name="CopyToBeatSaberFolder" AfterTargets="AfterBuild" Condition="$(BeatSaberDir) != ''">
+    <ItemGroup>
+      <CopyToBeatSaberFolder Include="$(PublishDir)**\*.*" />
+    </ItemGroup>
+
+    <Copy SourceFiles="@(CopyToBeatSaberFolder)" DestinationFiles="@(CopyToBeatSaberFolder->'$(BeatSaberDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
   <ItemGroup>
     <PackageReference Include="IsExternalInit" Version="1.0.3">

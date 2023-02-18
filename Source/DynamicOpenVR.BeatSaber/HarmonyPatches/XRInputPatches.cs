@@ -17,7 +17,6 @@
 // </copyright>
 
 using System.Collections.Generic;
-using System.Linq;
 using HarmonyLib;
 using UnityEngine;
 using UnityEngine.XR;
@@ -77,38 +76,32 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
         [HarmonyPriority(Priority.First)]
         public static void Postfix(List<XRNodeState> nodeStates)
         {
-            foreach (XRNodeState nodeState in nodeStates.ToList())
+            for (int i = 0; i < nodeStates.Count; ++i)
             {
-                switch (nodeState.nodeType)
+                XRNodeState nodeState = nodeStates[i];
+
+                switch (nodeStates[i].nodeType)
                 {
                     case XRNode.LeftHand:
-                        nodeStates.Remove(nodeState);
-                        nodeStates.Add(new XRNodeState()
-                        {
-                            nodeType = XRNode.LeftHand,
-                            position = Plugin.leftHandPose.pose.position,
-                            rotation = Plugin.leftHandPose.pose.rotation,
-                            tracked = Plugin.leftHandPose.isTracking,
-                            velocity = Plugin.leftHandPose.velocity,
-                            angularVelocity = Plugin.leftHandPose.angularVelocity,
-                            uniqueID = nodeState.uniqueID,
-                        });
+                        nodeState.position = Plugin.leftHandPose.pose.position;
+                        nodeState.position = Plugin.leftHandPose.pose.position;
+                        nodeState.rotation = Plugin.leftHandPose.pose.rotation;
+                        nodeState.tracked = Plugin.leftHandPose.isTracking;
+                        nodeState.velocity = Plugin.leftHandPose.velocity;
+                        nodeState.angularVelocity = Plugin.leftHandPose.angularVelocity;
                         break;
 
                     case XRNode.RightHand:
-                        nodeStates.Remove(nodeState);
-                        nodeStates.Add(new XRNodeState
-                        {
-                            nodeType = XRNode.RightHand,
-                            position = Plugin.rightHandPose.pose.position,
-                            rotation = Plugin.rightHandPose.pose.rotation,
-                            tracked = Plugin.rightHandPose.isTracking,
-                            velocity = Plugin.rightHandPose.velocity,
-                            angularVelocity = Plugin.rightHandPose.angularVelocity,
-                            uniqueID = nodeState.uniqueID,
-                        });
+                        nodeState.position = Plugin.rightHandPose.pose.position;
+                        nodeState.position = Plugin.rightHandPose.pose.position;
+                        nodeState.rotation = Plugin.rightHandPose.pose.rotation;
+                        nodeState.tracked = Plugin.rightHandPose.isTracking;
+                        nodeState.velocity = Plugin.rightHandPose.velocity;
+                        nodeState.angularVelocity = Plugin.rightHandPose.angularVelocity;
                         break;
                 }
+
+                nodeStates[i] = nodeState;
             }
         }
     }

@@ -58,6 +58,8 @@ namespace DynamicOpenVR.BeatSaber
             Logging.Logger.handler = new IPALogHandler(logger);
         }
 
+        public static UnityInputActions unityInputDevices { get; private set; }
+
         public static VectorInput leftTriggerValue { get; private set; }
 
         public static VectorInput rightTriggerValue { get; private set; }
@@ -265,12 +267,7 @@ namespace DynamicOpenVR.BeatSaber
                 beatSaberManifest = globalManifest["applications"]?.Value<JArray>()?.FirstOrDefault(a => a["app_key"]?.Value<string>() == "steam.app.620980")?.Value<JObject>();
             }
 
-            if (beatSaberManifest == null)
-            {
-                throw new Exception($"Beat Saber manifest not found in '{globalManifestPath}'");
-            }
-
-            return beatSaberManifest;
+            return beatSaberManifest ?? throw new Exception($"Beat Saber manifest not found in '{globalManifestPath}'");
         }
 
         private JObject ReadAppConfig(string configPath)
@@ -312,16 +309,15 @@ namespace DynamicOpenVR.BeatSaber
         {
             _logger.Info($"Writing manifest to '{manifestPath}'");
 
-            using (var writer = new StreamWriter(manifestPath))
-            {
-                writer.Write(JsonConvert.SerializeObject(beatSaberManifest, Formatting.Indented));
-            }
+            using StreamWriter writer = new(manifestPath);
+            writer.Write(JsonConvert.SerializeObject(beatSaberManifest, Formatting.Indented));
         }
 
         private void RegisterActionSet()
         {
             _logger.Info("Registering actions");
 
+            // Beat Saber inputs
             leftTriggerValue = new VectorInput("/actions/main/in/lefttriggervalue");
             rightTriggerValue = new VectorInput("/actions/main/in/righttriggervalue");
             menu = new BooleanInput("/actions/main/in/menu");
@@ -330,6 +326,46 @@ namespace DynamicOpenVR.BeatSaber
             leftHandPose = new PoseInput("/actions/main/in/lefthandpose");
             rightHandPose = new PoseInput("/actions/main/in/righthandpose");
             thumbstick = new Vector2Input("/actions/main/in/thumbstick");
+
+            // Generic Unity InputDevices stuff
+            // mappings are based on https://docs.unity3d.com/Manual/xr_input.html
+            unityInputDevices = new UnityInputActions
+            {
+                left = new UnityInputActionsHand
+                {
+                    pose = new PoseInput("/actions/unity/in/left_pose"),
+                    primaryButton = new BooleanInput("/actions/unity/in/left_primary_button"),
+                    primaryTouch = new BooleanInput("/actions/unity/in/left_primary_touch"),
+                    secondaryButton = new BooleanInput("/actions/unity/in/left_secondary_button"),
+                    secondaryTouch = new BooleanInput("/actions/unity/in/left_secondary_touch"),
+                    grip = new VectorInput("/actions/unity/in/left_grip"),
+                    gripButton = new BooleanInput("/actions/unity/in/left_grip_button"),
+                    trigger = new VectorInput("/actions/unity/in/left_trigger"),
+                    triggerButton = new BooleanInput("/actions/unity/in/left_trigger_button"),
+                    menuButton = new BooleanInput("/actions/unity/in/left_menu_button"),
+                    primary2DAxis = new Vector2Input("/actions/unity/in/left_primary_2d_axis"),
+                    primary2DAxisClick = new BooleanInput("/actions/unity/in/left_primary_2d_axis_click"),
+                    primary2DAxisTouch = new BooleanInput("/actions/unity/in/left_primary_2d_axis_touch"),
+                    haptics = new HapticVibrationOutput("/actions/unity/out/left_haptics"),
+                },
+                right = new UnityInputActionsHand
+                {
+                    pose = new PoseInput("/actions/unity/in/right_pose"),
+                    primaryButton = new BooleanInput("/actions/unity/in/right_primary_button"),
+                    primaryTouch = new BooleanInput("/actions/unity/in/right_primary_touch"),
+                    secondaryButton = new BooleanInput("/actions/unity/in/right_secondary_button"),
+                    secondaryTouch = new BooleanInput("/actions/unity/in/right_secondary_touch"),
+                    grip = new VectorInput("/actions/unity/in/right_grip"),
+                    gripButton = new BooleanInput("/actions/unity/in/right_grip_button"),
+                    trigger = new VectorInput("/actions/unity/in/right_trigger"),
+                    triggerButton = new BooleanInput("/actions/unity/in/right_trigger_button"),
+                    menuButton = new BooleanInput("/actions/unity/in/right_menu_button"),
+                    primary2DAxis = new Vector2Input("/actions/unity/in/right_primary_2d_axis"),
+                    primary2DAxisClick = new BooleanInput("/actions/unity/in/right_primary_2d_axis_click"),
+                    primary2DAxisTouch = new BooleanInput("/actions/unity/in/right_primary_2d_axis_touch"),
+                    haptics = new HapticVibrationOutput("/actions/unity/out/right_haptics"),
+                },
+            };
         }
 
         private void ApplyHarmonyPatches()
@@ -337,6 +373,44 @@ namespace DynamicOpenVR.BeatSaber
             _logger.Info("Applying input patches");
 
             _harmonyInstance.PatchAll();
+        }
+
+        public class UnityInputActions
+        {
+            public UnityInputActionsHand left { get; init; }
+
+            public UnityInputActionsHand right { get; init; }
+        }
+
+        public class UnityInputActionsHand
+        {
+            public PoseInput pose { get; init; }
+
+            public BooleanInput primaryButton { get; init; }
+
+            public BooleanInput primaryTouch { get; init; }
+
+            public BooleanInput secondaryButton { get; init; }
+
+            public BooleanInput secondaryTouch { get; init; }
+
+            public VectorInput grip { get; init; }
+
+            public BooleanInput gripButton { get; init; }
+
+            public VectorInput trigger { get; init; }
+
+            public BooleanInput triggerButton { get; init; }
+
+            public BooleanInput menuButton { get; init; }
+
+            public Vector2Input primary2DAxis { get; init; }
+
+            public BooleanInput primary2DAxisClick { get; init; }
+
+            public BooleanInput primary2DAxisTouch { get; init; }
+
+            public HapticVibrationOutput haptics { get; init; }
         }
     }
 }

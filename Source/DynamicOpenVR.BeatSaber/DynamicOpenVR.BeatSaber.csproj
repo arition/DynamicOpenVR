@@ -16,6 +16,9 @@
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="DynamicOpenVR.BeatSaber.csproj.user" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>$(BeatSaberDir)\Libs\0Harmony.dll</HintPath>
     </Reference>
@@ -86,8 +89,8 @@
     <!-- create Plugins folder and move plugin DLL/PDB inside -->
     <MakeDir Directories="$(PublishDir)Plugins" />
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(PublishDir)Plugins" />
-    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(PublishDir)Plugins" Condition="$(DebugType) == 'portable'" />
-    <Copy SourceFiles="$(TargetDir)$(TargetName).xml" DestinationFolder="$(PublishDir)Plugins" Condition="$(DebugType) == 'portable'" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(PublishDir)Plugins" Condition="$(DebugType) != 'none'" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).xml" DestinationFolder="$(PublishDir)Plugins" Condition="$(DebugType) != 'none'" />
 
     <!-- copy static files -->
     <Copy SourceFiles="@(CopyToOutput)" DestinationFiles="@(CopyToOutput->'$(PublishDir)\%(RecursiveDir)%(Filename)%(Extension)')" />

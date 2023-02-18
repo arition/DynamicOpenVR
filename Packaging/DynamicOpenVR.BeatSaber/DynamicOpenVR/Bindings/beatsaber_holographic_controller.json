@@ -1,65 +1,205 @@
 {
-   "bindings" : {
-      "/actions/main" : {
-         "haptics" : [
-            {
-               "output" : "/actions/main/out/rightslice",
-               "path" : "/user/hand/right/output/haptic"
-            },
-            {
-               "output" : "/actions/main/out/leftslice",
-               "path" : "/user/hand/left/output/haptic"
+  "bindings": {
+    "/actions/main": {
+      "chords": [],
+      "haptics": [
+        {
+          "output": "/actions/main/out/rightslice",
+          "path": "/user/hand/right/output/haptic"
+        },
+        {
+          "output": "/actions/main/out/leftslice",
+          "path": "/user/hand/left/output/haptic"
+        }
+      ],
+      "poses": [
+        {
+          "output": "/actions/main/in/lefthandpose",
+          "path": "/user/hand/left/pose/raw"
+        },
+        {
+          "output": "/actions/main/in/righthandpose",
+          "path": "/user/hand/right/pose/raw"
+        }
+      ],
+      "skeleton": [],
+      "sources": [
+        {
+          "inputs": {
+            "pull": {
+              "output": "/actions/main/in/lefttriggervalue"
             }
-         ],
-         "poses" : [
-            {
-               "output" : "/actions/main/in/lefthandpose",
-               "path" : "/user/hand/left/pose/raw"
-            },
-            {
-               "output" : "/actions/main/in/righthandpose",
-               "path" : "/user/hand/right/pose/raw"
+          },
+          "mode": "trigger",
+          "path": "/user/hand/left/input/trigger"
+        },
+        {
+          "inputs": {
+            "pull": {
+              "output": "/actions/main/in/righttriggervalue"
             }
-         ],
-         "sources" : [
-            {
-               "inputs" : {
-                  "pull" : {
-                     "output" : "/actions/main/in/lefttriggervalue"
-                  }
-               },
-               "mode" : "trigger",
-               "path" : "/user/hand/left/input/trigger"
-            },
-            {
-               "inputs" : {
-                  "pull" : {
-                     "output" : "/actions/main/in/righttriggervalue"
-                  }
-               },
-               "mode" : "trigger",
-               "path" : "/user/hand/right/input/trigger"
-            },
-            {
-               "inputs" : {
-                  "click" : {
-                     "output" : "/actions/main/in/menu"
-                  }
-               },
-               "mode" : "button",
-               "path" : "/user/hand/right/input/application_menu"
-            },
-            {
-               "inputs" : {
-                  "click" : {
-                     "output" : "/actions/main/in/menu"
-                  }
-               },
-               "mode" : "button",
-               "path" : "/user/hand/left/input/application_menu"
+          },
+          "mode": "trigger",
+          "path": "/user/hand/right/input/trigger"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/main/in/menu"
             }
-         ]
-      }
-   },
-   "controller_type" : "holographic_controller"
+          },
+          "mode": "button",
+          "path": "/user/hand/right/input/application_menu"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/main/in/menu"
+            }
+          },
+          "mode": "button",
+          "path": "/user/hand/left/input/application_menu"
+        },
+        {
+          "inputs": {
+            "position": {
+              "output": "/actions/main/in/thumbstick"
+            }
+          },
+          "mode": "joystick",
+          "path": "/user/hand/left/input/joystick"
+        },
+        {
+          "inputs": {
+            "position": {
+              "output": "/actions/main/in/thumbstick"
+            }
+          },
+          "mode": "joystick",
+          "path": "/user/hand/right/input/joystick"
+        }
+      ]
+    },
+    "/actions/unity": {
+      "haptics": [
+        {
+          "output": "/actions/unity/out/left_haptics",
+          "path": "/user/hand/left/output/haptic"
+        },
+        {
+          "output": "/actions/unity/out/right_haptics",
+          "path": "/user/hand/right/output/haptic"
+        }
+      ],
+      "poses": [
+        {
+          "output": "/actions/unity/in/left_pose",
+          "path": "/user/hand/left/pose/raw"
+        },
+        {
+          "output": "/actions/unity/in/right_pose",
+          "path": "/user/hand/right/pose/raw"
+        }
+      ],
+      "sources": [
+        {
+          "inputs": {
+            "pull": {
+              "output": "/actions/unity/in/left_trigger"
+            }
+          },
+          "mode": "trigger",
+          "path": "/user/hand/left/input/trigger"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/unity/in/left_trigger_button"
+            }
+          },
+          "mode": "button",
+          "path": "/user/hand/left/input/trigger"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/unity/in/left_primary_2d_axis_click"
+            },
+            "position": {
+              "output": "/actions/unity/in/left_primary_2d_axis"
+            }
+          },
+          "mode": "joystick",
+          "path": "/user/hand/left/input/joystick"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/unity/in/left_menu_button"
+            }
+          },
+          "mode": "button",
+          "path": "/user/hand/left/input/application_menu"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/unity/in/left_grip_button"
+            }
+          },
+          "mode": "button",
+          "path": "/user/hand/left/input/grip"
+        },
+        {
+          "inputs": {
+            "pull": {
+              "output": "/actions/unity/in/right_trigger"
+            }
+          },
+          "mode": "trigger",
+          "path": "/user/hand/right/input/trigger"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/unity/in/right_trigger_button"
+            }
+          },
+          "mode": "button",
+          "path": "/user/hand/right/input/trigger"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/unity/in/right_grip_button"
+            }
+          },
+          "mode": "button",
+          "path": "/user/hand/right/input/grip"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/unity/in/right_menu_button"
+            }
+          },
+          "mode": "button",
+          "path": "/user/hand/right/input/application_menu"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/unity/in/right_primary_2d_axis_click"
+            },
+            "position": {
+              "output": "/actions/unity/in/right_primary_2d_axis"
+            }
+          },
+          "mode": "joystick",
+          "path": "/user/hand/right/input/joystick"
+        }
+      ]
+    }
+  },
+  "controller_type": "holographic_controller"
 }
