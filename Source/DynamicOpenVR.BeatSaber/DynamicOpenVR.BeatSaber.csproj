@@ -70,7 +70,7 @@
     <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DynamicOpenVR\DynamicOpenVR.csproj"/>
+    <ProjectReference Include="..\DynamicOpenVR\DynamicOpenVR.csproj" />
   </ItemGroup>
   <Target Name="ClearReferenceCopyLocalPaths" AfterTargets="ResolveAssemblyReferences">
     <ItemGroup>

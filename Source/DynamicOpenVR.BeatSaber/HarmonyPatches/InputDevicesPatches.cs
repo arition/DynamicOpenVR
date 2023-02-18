@@ -17,10 +17,10 @@
 // </copyright>
 
 using System;
+using DynamicOpenVR.BeatSaber.InputCollections;
 using HarmonyLib;
 using UnityEngine;
 using UnityEngine.XR;
-using static DynamicOpenVR.BeatSaber.Plugin;
 
 namespace DynamicOpenVR.BeatSaber.HarmonyPatches
 {
@@ -49,15 +49,15 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
                 return true;
             }
 
-            UnityInputActionsHand hand;
+            UnityXRActionsHand hand;
 
             if (__instance.characteristics.HasFlag(InputDeviceCharacteristics.Left))
             {
-                hand = unityInputDevices.left;
+                hand = Plugin.unityXRActions.left;
             }
             else if (__instance.characteristics.HasFlag(InputDeviceCharacteristics.Right))
             {
-                hand = unityInputDevices.right;
+                hand = Plugin.unityXRActions.right;
             }
             else
             {
@@ -128,15 +128,15 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
                 return true;
             }
 
-            UnityInputActionsHand hand;
+            UnityXRActionsHand hand;
 
             if (__instance.characteristics.HasFlag(InputDeviceCharacteristics.Left))
             {
-                hand = unityInputDevices.left;
+                hand = Plugin.unityXRActions.left;
             }
             else if (__instance.characteristics.HasFlag(InputDeviceCharacteristics.Right))
             {
-                hand = unityInputDevices.right;
+                hand = Plugin.unityXRActions.right;
             }
             else
             {
@@ -175,15 +175,15 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
                 return true;
             }
 
-            UnityInputActionsHand hand;
+            UnityXRActionsHand hand;
 
             if (__instance.characteristics.HasFlag(InputDeviceCharacteristics.Left))
             {
-                hand = unityInputDevices.left;
+                hand = Plugin.unityXRActions.left;
             }
             else if (__instance.characteristics.HasFlag(InputDeviceCharacteristics.Right))
             {
-                hand = unityInputDevices.right;
+                hand = Plugin.unityXRActions.right;
             }
             else
             {
@@ -219,15 +219,15 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
                 return true;
             }
 
-            UnityInputActionsHand hand;
+            UnityXRActionsHand hand;
 
             if (__instance.characteristics.HasFlag(InputDeviceCharacteristics.Left))
             {
-                hand = unityInputDevices.left;
+                hand = Plugin.unityXRActions.left;
             }
             else if (__instance.characteristics.HasFlag(InputDeviceCharacteristics.Right))
             {
-                hand = unityInputDevices.right;
+                hand = Plugin.unityXRActions.right;
             }
             else
             {
@@ -269,15 +269,15 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
                 return true;
             }
 
-            UnityInputActionsHand hand;
+            UnityXRActionsHand hand;
 
             if (__instance.characteristics.HasFlag(InputDeviceCharacteristics.Left))
             {
-                hand = unityInputDevices.left;
+                hand = Plugin.unityXRActions.left;
             }
             else if (__instance.characteristics.HasFlag(InputDeviceCharacteristics.Right))
             {
-                hand = unityInputDevices.right;
+                hand = Plugin.unityXRActions.right;
             }
             else
             {
@@ -307,15 +307,15 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
                 return true;
             }
 
-            UnityInputActionsHand hand;
+            UnityXRActionsHand hand;
 
             if (__instance.characteristics.HasFlag(InputDeviceCharacteristics.Left))
             {
-                hand = unityInputDevices.left;
+                hand = Plugin.unityXRActions.left;
             }
             else if (__instance.characteristics.HasFlag(InputDeviceCharacteristics.Right))
             {
-                hand = unityInputDevices.right;
+                hand = Plugin.unityXRActions.right;
             }
             else
             {

@@ -32,13 +32,13 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
         {
             if (node == XRNode.LeftHand)
             {
-                __result = Plugin.leftHandPose.pose.position;
+                __result = Plugin.beatSaberActions.leftHandPose.pose.position;
                 return false;
             }
 
             if (node == XRNode.RightHand)
             {
-                __result = Plugin.rightHandPose.pose.position;
+                __result = Plugin.beatSaberActions.rightHandPose.pose.position;
                 return false;
             }
 
@@ -55,13 +55,13 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
         {
             if (node == XRNode.LeftHand)
             {
-                __result = Plugin.leftHandPose.pose.rotation;
+                __result = Plugin.beatSaberActions.leftHandPose.pose.rotation;
                 return false;
             }
 
             if (node == XRNode.RightHand)
             {
-                __result = Plugin.rightHandPose.pose.rotation;
+                __result = Plugin.beatSaberActions.rightHandPose.pose.rotation;
                 return false;
             }
 
@@ -83,21 +83,23 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
                 switch (nodeStates[i].nodeType)
                 {
                     case XRNode.LeftHand:
-                        nodeState.position = Plugin.leftHandPose.pose.position;
-                        nodeState.position = Plugin.leftHandPose.pose.position;
-                        nodeState.rotation = Plugin.leftHandPose.pose.rotation;
-                        nodeState.tracked = Plugin.leftHandPose.isTracking;
-                        nodeState.velocity = Plugin.leftHandPose.velocity;
-                        nodeState.angularVelocity = Plugin.leftHandPose.angularVelocity;
+                        nodeState.position = Plugin.beatSaberActions.leftHandPose.position;
+                        nodeState.rotation = Plugin.beatSaberActions.leftHandPose.rotation;
+                        nodeState.tracked = Plugin.beatSaberActions.leftHandPose.isTracking;
+                        nodeState.velocity = Plugin.beatSaberActions.leftHandPose.velocity;
+                        nodeState.angularVelocity = Plugin.beatSaberActions.leftHandPose.angularVelocity;
+                        nodeState.acceleration = Vector3.zero;
+                        nodeState.angularAcceleration = Vector3.zero;
                         break;
 
                     case XRNode.RightHand:
-                        nodeState.position = Plugin.rightHandPose.pose.position;
-                        nodeState.position = Plugin.rightHandPose.pose.position;
-                        nodeState.rotation = Plugin.rightHandPose.pose.rotation;
-                        nodeState.tracked = Plugin.rightHandPose.isTracking;
-                        nodeState.velocity = Plugin.rightHandPose.velocity;
-                        nodeState.angularVelocity = Plugin.rightHandPose.angularVelocity;
+                        nodeState.position = Plugin.beatSaberActions.rightHandPose.position;
+                        nodeState.rotation = Plugin.beatSaberActions.rightHandPose.rotation;
+                        nodeState.tracked = Plugin.beatSaberActions.rightHandPose.isTracking;
+                        nodeState.velocity = Plugin.beatSaberActions.rightHandPose.velocity;
+                        nodeState.angularVelocity = Plugin.beatSaberActions.rightHandPose.angularVelocity;
+                        nodeState.acceleration = Vector3.zero;
+                        nodeState.angularAcceleration = Vector3.zero;
                         break;
                 }
 

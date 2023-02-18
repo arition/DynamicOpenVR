@@ -33,13 +33,13 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
         {
             if (node == XRNode.LeftHand)
             {
-                __result = Plugin.leftTriggerValue.value;
+                __result = Plugin.beatSaberActions.leftTriggerValue.value;
                 return false;
             }
 
             if (node == XRNode.RightHand)
             {
-                __result = Plugin.rightTriggerValue.value;
+                __result = Plugin.beatSaberActions.rightTriggerValue.value;
                 return false;
             }
 
@@ -54,7 +54,7 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
         [HarmonyPriority(Priority.First)]
         public static bool Prefix(ref bool __result)
         {
-            __result = Plugin.menu.activeChange;
+            __result = Plugin.beatSaberActions.menu.activeChange;
 
             return false;
         }
@@ -67,7 +67,7 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
         [HarmonyPriority(Priority.First)]
         public static bool Prefix(ref bool __result)
         {
-            __result = Plugin.menu.state;
+            __result = Plugin.beatSaberActions.menu.state;
 
             return false;
         }
@@ -82,13 +82,13 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
         {
             if (node == XRNode.LeftHand)
             {
-                Plugin.leftSlice.TriggerHapticVibration(0.01f, strength, 25f);
+                Plugin.beatSaberActions.leftSlice.TriggerHapticVibration(0.01f, strength, 25f);
                 return false;
             }
 
             if (node == XRNode.RightHand)
             {
-                Plugin.rightSlice.TriggerHapticVibration(0.01f, strength, 25f);
+                Plugin.beatSaberActions.rightSlice.TriggerHapticVibration(0.01f, strength, 25f);
                 return false;
             }
 
@@ -107,7 +107,7 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
 
         public static bool Prefix(OpenVRHelper __instance)
         {
-            Vector2 vector = Plugin.thumbstick.vector;
+            Vector2 vector = Plugin.beatSaberActions.thumbstick.vector;
 
             if (vector.sqrMagnitude <= 0.01f)
             {

@@ -20,6 +20,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using DynamicOpenVR.BeatSaber.InputCollections;
 using DynamicOpenVR.IO;
 using HarmonyLib;
 using IPA;
@@ -58,23 +59,9 @@ namespace DynamicOpenVR.BeatSaber
             Logging.Logger.handler = new IPALogHandler(logger);
         }
 
-        public static UnityInputActions unityInputDevices { get; private set; }
+        public static UnityXRActions unityXRActions { get; private set; }
 
-        public static VectorInput leftTriggerValue { get; private set; }
-
-        public static VectorInput rightTriggerValue { get; private set; }
-
-        public static BooleanInput menu { get; private set; }
-
-        public static HapticVibrationOutput leftSlice { get; private set; }
-
-        public static HapticVibrationOutput rightSlice { get; private set; }
-
-        public static PoseInput leftHandPose { get; private set; }
-
-        public static PoseInput rightHandPose { get; private set; }
-
-        public static Vector2Input thumbstick { get; private set; }
+        public static BeatSaberActions beatSaberActions { get; private set; }
 
         [OnStart]
         public void OnStart()
@@ -117,15 +104,8 @@ namespace DynamicOpenVR.BeatSaber
         [OnExit]
         public void OnExit()
         {
-            // not really necessary since the game is closing, just following good practices
-            leftTriggerValue?.Dispose();
-            rightTriggerValue?.Dispose();
-            menu?.Dispose();
-            leftSlice?.Dispose();
-            rightSlice?.Dispose();
-            leftHandPose?.Dispose();
-            rightHandPose?.Dispose();
-            thumbstick?.Dispose();
+            beatSaberActions?.Dispose();
+            unityXRActions?.Dispose();
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -318,20 +298,23 @@ namespace DynamicOpenVR.BeatSaber
             _logger.Info("Registering actions");
 
             // Beat Saber inputs
-            leftTriggerValue = new VectorInput("/actions/main/in/lefttriggervalue");
-            rightTriggerValue = new VectorInput("/actions/main/in/righttriggervalue");
-            menu = new BooleanInput("/actions/main/in/menu");
-            leftSlice = new HapticVibrationOutput("/actions/main/out/leftslice");
-            rightSlice = new HapticVibrationOutput("/actions/main/out/rightslice");
-            leftHandPose = new PoseInput("/actions/main/in/lefthandpose");
-            rightHandPose = new PoseInput("/actions/main/in/righthandpose");
-            thumbstick = new Vector2Input("/actions/main/in/thumbstick");
+            beatSaberActions = new BeatSaberActions()
+            {
+                leftTriggerValue = new VectorInput("/actions/main/in/lefttriggervalue"),
+                rightTriggerValue = new VectorInput("/actions/main/in/righttriggervalue"),
+                menu = new BooleanInput("/actions/main/in/menu"),
+                leftSlice = new HapticVibrationOutput("/actions/main/out/leftslice"),
+                rightSlice = new HapticVibrationOutput("/actions/main/out/rightslice"),
+                leftHandPose = new PoseInput("/actions/main/in/lefthandpose"),
+                rightHandPose = new PoseInput("/actions/main/in/righthandpose"),
+                thumbstick = new Vector2Input("/actions/main/in/thumbstick"),
+            };
 
             // Generic Unity InputDevices stuff
             // mappings are based on https://docs.unity3d.com/Manual/xr_input.html
-            unityInputDevices = new UnityInputActions
+            unityXRActions = new UnityXRActions
             {
-                left = new UnityInputActionsHand
+                left = new UnityXRActionsHand
                 {
                     pose = new PoseInput("/actions/unity/in/left_pose"),
                     primaryButton = new BooleanInput("/actions/unity/in/left_primary_button"),
@@ -348,7 +331,7 @@ namespace DynamicOpenVR.BeatSaber
                     primary2DAxisTouch = new BooleanInput("/actions/unity/in/left_primary_2d_axis_touch"),
                     haptics = new HapticVibrationOutput("/actions/unity/out/left_haptics"),
                 },
-                right = new UnityInputActionsHand
+                right = new UnityXRActionsHand
                 {
                     pose = new PoseInput("/actions/unity/in/right_pose"),
                     primaryButton = new BooleanInput("/actions/unity/in/right_primary_button"),
@@ -373,44 +356,6 @@ namespace DynamicOpenVR.BeatSaber
             _logger.Info("Applying input patches");
 
             _harmonyInstance.PatchAll();
-        }
-
-        public class UnityInputActions
-        {
-            public UnityInputActionsHand left { get; init; }
-
-            public UnityInputActionsHand right { get; init; }
-        }
-
-        public class UnityInputActionsHand
-        {
-            public PoseInput pose { get; init; }
-
-            public BooleanInput primaryButton { get; init; }
-
-            public BooleanInput primaryTouch { get; init; }
-
-            public BooleanInput secondaryButton { get; init; }
-
-            public BooleanInput secondaryTouch { get; init; }
-
-            public VectorInput grip { get; init; }
-
-            public BooleanInput gripButton { get; init; }
-
-            public VectorInput trigger { get; init; }
-
-            public BooleanInput triggerButton { get; init; }
-
-            public BooleanInput menuButton { get; init; }
-
-            public Vector2Input primary2DAxis { get; init; }
-
-            public BooleanInput primary2DAxisClick { get; init; }
-
-            public BooleanInput primary2DAxisTouch { get; init; }
-
-            public HapticVibrationOutput haptics { get; init; }
         }
     }
 }
