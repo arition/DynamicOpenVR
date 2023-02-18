@@ -31,13 +31,13 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
         {
             if (node == XRNode.LeftHand)
             {
-                Plugin.beatSaberActions.leftSlice.TriggerHapticVibration(duration, strength, frequency);
+                Plugin.beatSaberActions.leftSliceHaptics.TriggerHapticVibration(duration, strength, frequency);
                 return false;
             }
 
             if (node == XRNode.RightHand)
             {
-                Plugin.beatSaberActions.rightSlice.TriggerHapticVibration(duration, strength, frequency);
+                Plugin.beatSaberActions.rightSliceHaptics.TriggerHapticVibration(duration, strength, frequency);
                 return false;
             }
 

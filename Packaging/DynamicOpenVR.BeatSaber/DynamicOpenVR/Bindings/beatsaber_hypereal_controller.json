@@ -3,21 +3,21 @@
     "/actions/main": {
       "haptics": [
         {
-          "output": "/actions/main/out/leftslice",
+          "output": "/actions/main/out/left_slice_haptics",
           "path": "/user/hand/left/output/haptic"
         },
         {
-          "output": "/actions/main/out/rightslice",
+          "output": "/actions/main/out/right_slice_haptics",
           "path": "/user/hand/right/output/haptic"
         }
       ],
       "poses": [
         {
-          "output": "/actions/main/in/lefthandpose",
+          "output": "/actions/main/in/left_hand_pose",
           "path": "/user/hand/left/pose/raw"
         },
         {
-          "output": "/actions/main/in/righthandpose",
+          "output": "/actions/main/in/right_hand_pose",
           "path": "/user/hand/right/pose/raw"
         }
       ],
@@ -25,7 +25,7 @@
         {
           "inputs": {
             "pull": {
-              "output": "/actions/main/in/lefttriggervalue"
+              "output": "/actions/main/in/left_trigger"
             }
           },
           "mode": "trigger",
@@ -34,7 +34,7 @@
         {
           "inputs": {
             "pull": {
-              "output": "/actions/main/in/righttriggervalue"
+              "output": "/actions/main/in/right_trigger"
             }
           },
           "mode": "trigger",
@@ -43,7 +43,7 @@
         {
           "inputs": {
             "click": {
-              "output": "/actions/main/in/menu"
+              "output": "/actions/main/in/left_menu_button"
             }
           },
           "mode": "button",
@@ -52,7 +52,7 @@
         {
           "inputs": {
             "click": {
-              "output": "/actions/main/in/menu"
+              "output": "/actions/main/in/right_menu_button"
             }
           },
           "mode": "button",

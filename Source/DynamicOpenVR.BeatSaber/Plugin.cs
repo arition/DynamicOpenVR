@@ -241,14 +241,16 @@ namespace DynamicOpenVR.BeatSaber
             // Beat Saber inputs
             beatSaberActions = new BeatSaberActions()
             {
-                leftTriggerValue = new VectorInput("/actions/main/in/lefttriggervalue"),
-                rightTriggerValue = new VectorInput("/actions/main/in/righttriggervalue"),
-                menu = new BooleanInput("/actions/main/in/menu"),
-                leftSlice = new HapticVibrationOutput("/actions/main/out/leftslice"),
-                rightSlice = new HapticVibrationOutput("/actions/main/out/rightslice"),
-                leftHandPose = new PoseInput("/actions/main/in/lefthandpose"),
-                rightHandPose = new PoseInput("/actions/main/in/righthandpose"),
-                thumbstick = new Vector2Input("/actions/main/in/thumbstick"),
+                leftTrigger = new VectorInput("/actions/main/in/left_trigger"),
+                rightTrigger = new VectorInput("/actions/main/in/right_trigger"),
+                leftMenuButton = new BooleanInput("/actions/main/in/left_menu_button"),
+                rightMenuButton = new BooleanInput("/actions/main/in/right_menu_button"),
+                leftSliceHaptics = new HapticVibrationOutput("/actions/main/out/left_slice_haptics"),
+                rightSliceHaptics = new HapticVibrationOutput("/actions/main/out/right_slice_haptics"),
+                leftHandPose = new PoseInput("/actions/main/in/left_hand_pose"),
+                rightHandPose = new PoseInput("/actions/main/in/right_hand_pose"),
+                leftThumbstick = new Vector2Input("/actions/main/in/left_thumbstick"),
+                rightThumbstick = new Vector2Input("/actions/main/in/right_thumbstick"),
             };
 
             // Generic Unity InputDevices stuff

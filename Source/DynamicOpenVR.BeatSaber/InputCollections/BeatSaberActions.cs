@@ -23,32 +23,38 @@ namespace DynamicOpenVR.BeatSaber.InputCollections
 {
     internal class BeatSaberActions : IDisposable
     {
-        public VectorInput leftTriggerValue { get; init; }
+        public VectorInput leftTrigger { get; init; }
 
-        public VectorInput rightTriggerValue { get; init; }
+        public VectorInput rightTrigger { get; init; }
 
-        public BooleanInput menu { get; init; }
+        public BooleanInput leftMenuButton { get; init; }
 
-        public HapticVibrationOutput leftSlice { get; init; }
+        public BooleanInput rightMenuButton { get; init; }
 
-        public HapticVibrationOutput rightSlice { get; init; }
+        public HapticVibrationOutput leftSliceHaptics { get; init; }
+
+        public HapticVibrationOutput rightSliceHaptics { get; init; }
 
         public PoseInput leftHandPose { get; init; }
 
         public PoseInput rightHandPose { get; init; }
 
-        public Vector2Input thumbstick { get; init; }
+        public Vector2Input leftThumbstick { get; init; }
+
+        public Vector2Input rightThumbstick { get; init; }
 
         public void Dispose()
         {
-            leftTriggerValue?.Dispose();
-            rightTriggerValue?.Dispose();
-            menu?.Dispose();
-            leftSlice?.Dispose();
-            rightSlice?.Dispose();
+            leftTrigger?.Dispose();
+            rightTrigger?.Dispose();
+            leftMenuButton?.Dispose();
+            rightMenuButton?.Dispose();
+            leftSliceHaptics?.Dispose();
+            rightSliceHaptics?.Dispose();
             leftHandPose?.Dispose();
             rightHandPose?.Dispose();
-            thumbstick?.Dispose();
+            leftThumbstick?.Dispose();
+            rightThumbstick?.Dispose();
         }
     }
 }
