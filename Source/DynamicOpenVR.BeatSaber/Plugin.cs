@@ -135,6 +135,7 @@ namespace DynamicOpenVR.BeatSaber
             VRApplication beatSaberManifest = ReadBeatSaberManifest(kGlobalManifestPath);
 
             beatSaberManifest.actionManifestPath = kActionManifestPath;
+            beatSaberManifest.defaultBindings.Clear();
 
             var vrManifest = new VRApplicationManifest
             {
