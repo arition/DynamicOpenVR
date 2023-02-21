@@ -44,9 +44,7 @@ namespace DynamicOpenVR.BeatSaber
         internal static readonly string kAppConfigPath = Path.Combine(kSteamPath, "config", "appconfig.json");
         internal static readonly string kGlobalManifestPath = Path.Combine(kSteamPath, "config", "steamapps.vrmanifest");
 
-        private static readonly string kActionManifestPath = Path.Combine(UnityGame.InstallPath, "DynamicOpenVR", "action_manifest.json");
-
-        private static readonly JsonSerializerSettings kJsonSerializerSettings = new()
+        internal static readonly JsonSerializerSettings kJsonSerializerSettings = new()
         {
             ContractResolver = new DefaultContractResolver
             {
@@ -55,6 +53,8 @@ namespace DynamicOpenVR.BeatSaber
             Formatting = Formatting.Indented,
             NullValueHandling = NullValueHandling.Ignore,
         };
+
+        private static readonly string kActionManifestPath = Path.Combine(UnityGame.InstallPath, "DynamicOpenVR", "action_manifest.json");
 
         private readonly Logger _logger;
         private readonly Harmony _harmonyInstance;

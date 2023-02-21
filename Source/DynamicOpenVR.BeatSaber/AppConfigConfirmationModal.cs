@@ -201,7 +201,7 @@ namespace DynamicOpenVR.BeatSaber
 
             using (var writer = new StreamWriter(configPath))
             {
-                writer.Write(JsonConvert.SerializeObject(appConfig, Formatting.Indented));
+                writer.Write(JsonConvert.SerializeObject(appConfig, Plugin.kJsonSerializerSettings));
             }
         }
     }
