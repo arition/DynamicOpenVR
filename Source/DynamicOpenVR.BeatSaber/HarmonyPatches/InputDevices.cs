@@ -17,6 +17,7 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using DynamicOpenVR.BeatSaber.InputCollections;
 using HarmonyLib;
 using UnityEngine;
@@ -24,6 +25,105 @@ using UnityEngine.XR;
 
 namespace DynamicOpenVR.BeatSaber.HarmonyPatches
 {
+    [HarmonyPatch(typeof(InputDevice), nameof(InputDevice.TryGetFeatureUsages))]
+    internal static class InputDevice_TryGetFeatureUsages
+    {
+        public static bool Prefix(InputDevice __instance, List<InputFeatureUsage> featureUsages, ref bool __result)
+        {
+            if (!__instance.isValid || !__instance.characteristics.HasFlag(InputDeviceCharacteristics.Controller) || !__instance.characteristics.HasFlag(InputDeviceCharacteristics.HeldInHand))
+            {
+                return true;
+            }
+
+            UnityXRActionsHand hand;
+
+            if (__instance.characteristics.HasFlag(InputDeviceCharacteristics.Left))
+            {
+                hand = Plugin.unityXRActions.left;
+            }
+            else if (__instance.characteristics.HasFlag(InputDeviceCharacteristics.Right))
+            {
+                hand = Plugin.unityXRActions.right;
+            }
+            else
+            {
+                return true;
+            }
+
+            if (hand.pose.isActive)
+            {
+                featureUsages.Add((InputFeatureUsage)CommonUsages.devicePosition);
+                featureUsages.Add((InputFeatureUsage)CommonUsages.deviceRotation);
+                featureUsages.Add((InputFeatureUsage)CommonUsages.deviceVelocity);
+                featureUsages.Add((InputFeatureUsage)CommonUsages.deviceAngularVelocity);
+            }
+
+            if (hand.primaryButton.isActive)
+            {
+                featureUsages.Add((InputFeatureUsage)CommonUsages.primaryButton);
+            }
+
+            if (hand.primaryTouch.isActive)
+            {
+                featureUsages.Add((InputFeatureUsage)CommonUsages.primaryTouch);
+            }
+
+            if (hand.secondaryButton.isActive)
+            {
+                featureUsages.Add((InputFeatureUsage)CommonUsages.secondaryButton);
+            }
+
+            if (hand.secondaryTouch.isActive)
+            {
+                featureUsages.Add((InputFeatureUsage)CommonUsages.secondaryTouch);
+            }
+
+            if (hand.grip.isActive)
+            {
+                featureUsages.Add((InputFeatureUsage)CommonUsages.grip);
+            }
+
+            if (hand.gripButton.isActive)
+            {
+                featureUsages.Add((InputFeatureUsage)CommonUsages.gripButton);
+            }
+
+            if (hand.trigger.isActive)
+            {
+                featureUsages.Add((InputFeatureUsage)CommonUsages.trigger);
+            }
+
+            if (hand.triggerButton.isActive)
+            {
+                featureUsages.Add((InputFeatureUsage)CommonUsages.triggerButton);
+            }
+
+            if (hand.menuButton.isActive)
+            {
+                featureUsages.Add((InputFeatureUsage)CommonUsages.menuButton);
+            }
+
+            if (hand.primary2DAxis.isActive)
+            {
+                featureUsages.Add((InputFeatureUsage)CommonUsages.primary2DAxis);
+            }
+
+            if (hand.primary2DAxisClick.isActive)
+            {
+                featureUsages.Add((InputFeatureUsage)CommonUsages.primary2DAxisClick);
+            }
+
+            if (hand.primary2DAxisTouch.isActive)
+            {
+                featureUsages.Add((InputFeatureUsage)CommonUsages.primary2DAxisTouch);
+            }
+
+            __result = true;
+
+            return false;
+        }
+    }
+
     /*
      * Support the following CommonUsages:
      * isTracked (bool)
@@ -297,7 +397,7 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
     }
 
     [HarmonyPatch(typeof(InputDevice), nameof(InputDevice.SendHapticImpulse), new Type[] { typeof(uint), typeof(float), typeof(float) })]
-    internal static class InputDevice_TryGetHapticCapabilities
+    internal static class InputDevice_SendHapticImpulse
     {
         public static bool Prefix(InputDevice __instance, float amplitude, float duration)
         {
