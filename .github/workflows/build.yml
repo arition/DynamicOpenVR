@@ -1,36 +1,40 @@
-name: Build DynamicOpenVR
+name: Build
 
-on: [ push ]
+on:
+  push:
+    paths:
+    - .github/workflows/build.yml
+    - Libraries/**
+    - Packaging/**
+    - Source/**
 
 jobs:
   build:
     runs-on: windows-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+    - name: Check out
+      uses: actions/checkout@v3
 
-    - name: Set up .NET Core
-      uses: actions/setup-dotnet@v1.7.2
-      with:
-        dotnet-version: 3.1.x
+    - name: Set up environment
+      run: ${{ github.workspace }}\.github\workflows\set_up_env.ps1 "${{ github.workspace }}\Packaging\DynamicOpenVR\Plugins\DynamicOpenVR.manifest"
 
-    - name: Set manifest version
-      run: ./bsipa_version_hash.ps1 "Packaging\DynamicOpenVR\Plugins\DynamicOpenVR.manifest" "Source\DynamicOpenVR\Properties\AssemblyInfo.cs"
+    - name: Fetch Beat Saber Bindings
+      run: git clone https://${{ github.actor }}:${{ secrets.PRIVATE_GITHUB_TOKEN }}@github.com/nicoco007/BeatSaberBindings --branch v${{ env.GAME_VERSION }} --single-branch '${{ runner.temp }}\BeatSaberBindings\Beat Saber_Data\Managed'
 
     - name: Build Debug
-      run: dotnet build Source\DynamicOpenVR\DynamicOpenVR.csproj -c Debug
+      run: dotnet build Source\DynamicOpenVR\DynamicOpenVR.csproj -c Debug -p:BeatSaberDir=${{ runner.temp }}\BeatSaberBindings
 
     - name: Upload Debug
-      uses: actions/upload-artifact@v2.2.0
+      uses: actions/upload-artifact@v3
       with:
         name: DynamicOpenVR-${{ env.ZIP_VERSION }}-DEBUG
-        path: Source\DynamicOpenVR\bin\Debug\net4.7.2\publish
+        path: Source\DynamicOpenVR\bin\Debug\netstandard2.0\publish
 
     - name: Build Release
-      run: dotnet build Source\DynamicOpenVR\DynamicOpenVR.csproj -c Release
+      run: dotnet build Source\DynamicOpenVR\DynamicOpenVR.csproj -c Release -p:BeatSaberDir=${{ runner.temp }}\BeatSaberBindings
 
     - name: Upload Release
-      uses: actions/upload-artifact@v2.2.0
+      uses: actions/upload-artifact@v3
       with:
         name: DynamicOpenVR-${{ env.ZIP_VERSION }}-RELEASE
-        path: Source\DynamicOpenVR\bin\Release\net4.7.2\publish
+        path: Source\DynamicOpenVR\bin\Release\netstandard2.0\publish

@@ -5,7 +5,7 @@
     <AssemblyName>DynamicOpenVR.IL2CPP</AssemblyName>
     <DefineConstants>UNITY_5_3_OR_NEWER;OPENVR_XR_API;IL2CPP</DefineConstants>
     <TargetFramework>net6.0</TargetFramework>
-    <LibrariesDir>$(SolutionDir)..\Libraries\Il2CppInterop\</LibrariesDir>
+    <LibrariesDir>$(ProjectDir)..\..\Libraries\Il2CppInterop\</LibrariesDir>
   </PropertyGroup>
   <Import Project="$(SolutionDir)DynamicOpenVR\Common.props" />
   <ItemGroup>

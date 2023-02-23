@@ -5,7 +5,7 @@
     <AssemblyName>DynamicOpenVR</AssemblyName>
     <DefineConstants>UNITY_5_3_OR_NEWER;MONO</DefineConstants>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <LibrariesDir>$(SolutionDir)..\Libraries\Mono\</LibrariesDir>
+    <LibrariesDir>$(ProjectDir)..\..\Libraries\Mono\</LibrariesDir>
   </PropertyGroup>
   <Import Project="Common.props" />
   <Target Name="ClearReferenceCopyLocalPaths" AfterTargets="ResolveAssemblyReferences">
