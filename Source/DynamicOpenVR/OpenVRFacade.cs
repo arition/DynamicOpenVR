@@ -138,7 +138,7 @@ namespace DynamicOpenVR
         {
             InputPoseActionData_t actionData = default;
 
-            EVRInputError error = OpenVR.Input.GetPoseActionDataRelativeToNow(actionHandle, origin, 0, ref actionData, (uint)Marshal.SizeOf(typeof(InputPoseActionData_t)), OpenVR.k_ulInvalidInputValueHandle);
+            EVRInputError error = OpenVR.Input.GetPoseActionDataForNextFrame(actionHandle, origin, ref actionData, (uint)Marshal.SizeOf(typeof(InputPoseActionData_t)), OpenVR.k_ulInvalidInputValueHandle);
             if (error is not EVRInputError.None and not EVRInputError.NoData)
             {
                 throw new OpenVRInputException($"Could not get pose data for action with handle {actionHandle}: {error}", error);
