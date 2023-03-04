@@ -142,7 +142,7 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
     [HarmonyPatch(typeof(InputDevice), nameof(InputDevice.TryGetFeatureValue), new Type[] { typeof(InputFeatureUsage<bool>), typeof(bool) }, new ArgumentType[] { ArgumentType.Normal, ArgumentType.Out })]
     internal static class InputDevice_TryGetFeatureValue_Boolean
     {
-        public static bool Prefix(InputDevice __instance, InputFeatureUsage<bool> usage, ref bool value)
+        public static bool Prefix(InputDevice __instance, InputFeatureUsage<bool> usage, ref bool value, ref bool __result)
         {
             if (!__instance.isValid || !__instance.characteristics.HasFlag(InputDeviceCharacteristics.Controller) || !__instance.characteristics.HasFlag(InputDeviceCharacteristics.HeldInHand))
             {
@@ -209,6 +209,8 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
                 return true;
             }
 
+            __result = true;
+
             return false;
         }
     }
@@ -221,7 +223,7 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
     [HarmonyPatch(typeof(InputDevice), nameof(InputDevice.TryGetFeatureValue), new Type[] { typeof(InputFeatureUsage<float>), typeof(float) }, new ArgumentType[] { ArgumentType.Normal, ArgumentType.Out })]
     internal static class InputDevice_TryGetFeatureValue_Float
     {
-        public static bool Prefix(InputDevice __instance, InputFeatureUsage<float> usage, ref float value)
+        public static bool Prefix(InputDevice __instance, InputFeatureUsage<float> usage, ref float value, ref bool __result)
         {
             if (!__instance.isValid || !__instance.characteristics.HasFlag(InputDeviceCharacteristics.Controller) || !__instance.characteristics.HasFlag(InputDeviceCharacteristics.HeldInHand))
             {
@@ -256,6 +258,8 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
                 return true;
             }
 
+            __result = true;
+
             return false;
         }
     }
@@ -267,7 +271,7 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
     [HarmonyPatch(typeof(InputDevice), nameof(InputDevice.TryGetFeatureValue), new Type[] { typeof(InputFeatureUsage<Vector2>), typeof(Vector2) }, new ArgumentType[] { ArgumentType.Normal, ArgumentType.Out })]
     internal static class InputDevice_TryGetFeatureValue_Vector2
     {
-        public static bool Prefix(InputDevice __instance, InputFeatureUsage<Vector2> usage, ref Vector2 value)
+        public static bool Prefix(InputDevice __instance, InputFeatureUsage<Vector2> usage, ref Vector2 value, ref bool __result)
         {
             if (!__instance.isValid || !__instance.characteristics.HasFlag(InputDeviceCharacteristics.Controller) || !__instance.characteristics.HasFlag(InputDeviceCharacteristics.HeldInHand))
             {
@@ -298,6 +302,8 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
                 return true;
             }
 
+            __result = true;
+
             return false;
         }
     }
@@ -311,7 +317,7 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
     [HarmonyPatch(typeof(InputDevice), nameof(InputDevice.TryGetFeatureValue), new Type[] { typeof(InputFeatureUsage<Vector3>), typeof(Vector3) }, new ArgumentType[] { ArgumentType.Normal, ArgumentType.Out })]
     internal static class InputDevice_TryGetFeatureValue_Vector3
     {
-        public static bool Prefix(InputDevice __instance, InputFeatureUsage<Vector3> usage, ref Vector3 value)
+        public static bool Prefix(InputDevice __instance, InputFeatureUsage<Vector3> usage, ref Vector3 value, ref bool __result)
         {
             if (!__instance.isValid || !__instance.characteristics.HasFlag(InputDeviceCharacteristics.Controller) || !__instance.characteristics.HasFlag(InputDeviceCharacteristics.HeldInHand))
             {
@@ -350,6 +356,8 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
                 return true;
             }
 
+            __result = true;
+
             return false;
         }
     }
@@ -361,7 +369,7 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
     [HarmonyPatch(typeof(InputDevice), nameof(InputDevice.TryGetFeatureValue), new Type[] { typeof(InputFeatureUsage<Quaternion>), typeof(Quaternion) }, new ArgumentType[] { ArgumentType.Normal, ArgumentType.Out })]
     internal static class InputDevice_TryGetFeatureValue_Quaternion
     {
-        public static bool Prefix(InputDevice __instance, InputFeatureUsage<Quaternion> usage, ref Quaternion value)
+        public static bool Prefix(InputDevice __instance, InputFeatureUsage<Quaternion> usage, ref Quaternion value, ref bool __result)
         {
             if (!__instance.isValid || !__instance.characteristics.HasFlag(InputDeviceCharacteristics.Controller) || !__instance.characteristics.HasFlag(InputDeviceCharacteristics.HeldInHand))
             {
@@ -392,6 +400,8 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
                 return true;
             }
 
+            __result = true;
+
             return false;
         }
     }
@@ -399,7 +409,7 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
     [HarmonyPatch(typeof(InputDevice), nameof(InputDevice.SendHapticImpulse), new Type[] { typeof(uint), typeof(float), typeof(float) })]
     internal static class InputDevice_SendHapticImpulse
     {
-        public static bool Prefix(InputDevice __instance, float amplitude, float duration)
+        public static bool Prefix(InputDevice __instance, float amplitude, float duration, ref bool __result)
         {
             if (!__instance.isValid || !__instance.characteristics.HasFlag(InputDeviceCharacteristics.Controller) || !__instance.characteristics.HasFlag(InputDeviceCharacteristics.HeldInHand))
             {
@@ -422,6 +432,8 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
             }
 
             hand.haptics.TriggerHapticVibration(duration, amplitude);
+
+            __result = true;
 
             return false;
         }
