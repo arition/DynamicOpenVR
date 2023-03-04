@@ -136,8 +136,6 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
      * menuButton (bool)
      * primary2DAxisClick (bool)
      * primary2DAxisTouch (bool)
-     * secondary2DAxisClick (bool)
-     * secondary2DAxisTouch (bool)
      */
     [HarmonyPatch(typeof(InputDevice), nameof(InputDevice.TryGetFeatureValue), new Type[] { typeof(InputFeatureUsage<bool>), typeof(bool) }, new ArgumentType[] { ArgumentType.Normal, ArgumentType.Out })]
     internal static class InputDevice_TryGetFeatureValue_Boolean
