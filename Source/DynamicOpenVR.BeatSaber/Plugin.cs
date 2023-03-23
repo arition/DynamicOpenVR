@@ -17,9 +17,12 @@
 // </copyright>
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Reflection.Emit;
 using DynamicOpenVR.BeatSaber.InputCollections;
 using DynamicOpenVR.IO;
 using DynamicOpenVR.SteamVR;
@@ -29,8 +32,11 @@ using IPA;
 using IPA.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Unity.XR.OpenVR;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.XR;
+using UnityEngine.XR.Management;
 using Zenject;
 using Logger = IPA.Logging.Logger;
 
@@ -56,6 +62,9 @@ namespace DynamicOpenVR.BeatSaber
 
         private static readonly string kActionManifestPath = Path.Combine(UnityGame.InstallPath, "DynamicOpenVR", "action_manifest.json");
 
+        private static readonly MethodInfo kLoadedDeviceNameGetter = AccessTools.PropertyGetter(typeof(XRSettings), nameof(XRSettings.loadedDeviceName));
+        private static readonly MethodInfo kIndexOfMethod = AccessTools.Method(typeof(string), nameof(string.IndexOf), new Type[] { typeof(string), typeof(StringComparison) });
+
         private readonly Logger _logger;
         private readonly Harmony _harmonyInstance;
 
@@ -79,43 +88,49 @@ namespace DynamicOpenVR.BeatSaber
         {
             _logger.Info("Starting " + typeof(Plugin).Namespace);
 
-            try
-            {
-                OpenVRUtilities.Init();
-            }
-            catch (Exception ex)
-            {
-                _logger.Error("Failed to initialize OpenVR API; DynamicOpenVR will not run");
-                _logger.Error(ex);
-                return;
-            }
-
-            _logger.Info("Successfully initialized OpenVR API");
-
-            // adding the manifest to config is more of a quality of life thing
-            try
-            {
-                AddManifestToSteamConfig();
-            }
-            catch (Exception ex)
-            {
-                _logger.Error("Failed to update SteamVR manifest.");
-                _logger.Error(ex);
-            }
-
-            RegisterActionSet();
-            ApplyHarmonyPatches();
-
-            OpenVRActionManager.instance.Initialize("Beat Saber", kActionManifestPath);
-
             SceneManager.sceneLoaded += OnSceneLoaded;
+
+            _harmonyInstance.Patch(AccessTools.Method(typeof(MainSystemInit), nameof(MainSystemInit.InstallBindings), new Type[] { typeof(DiContainer) }), transpiler: new HarmonyMethod(AccessTools.Method(typeof(Plugin), nameof(MainSystemInitInstallBindingsTranspiler))));
+
+            SharedCoroutineStarter.instance.StartCoroutine(InitializeOpenVR());
         }
 
         [OnExit]
         public void OnExit()
         {
             beatSaberActions?.Dispose();
-            unityXRActions?.Dispose();
+        }
+
+        private static IEnumerable<CodeInstruction> MainSystemInitInstallBindingsTranspiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+        {
+            var cm = new CodeMatcher(instructions, generator);
+
+            cm.MatchForward(
+                true,
+                new CodeMatch((instruction) => instruction.opcode == OpCodes.Call && ((MethodInfo)instruction.operand) == kLoadedDeviceNameGetter),
+                new CodeMatch((instruction) => instruction.opcode == OpCodes.Ldstr && ((string)instruction.operand) == "OpenXR"),
+                new CodeMatch((instruction) => instruction.opcode == OpCodes.Ldc_I4_5),
+                new CodeMatch((instruction) => instruction.opcode == OpCodes.Callvirt && ((MethodInfo)instruction.operand) == kIndexOfMethod),
+                new CodeMatch((instruction) => instruction.opcode == OpCodes.Ldc_I4_0),
+                new CodeMatch((instruction) => instruction.opcode == OpCodes.Blt));
+
+            if (!cm.IsValid)
+            {
+                Debug.LogError($"Could not find UnityXR instructions; input may not work as expected");
+                return instructions;
+            }
+
+            // this is simply adding `|| XRSettings.loadedDeviceName.IndexOf("OpenVR", StringComparison.OrdinalIgnoreCase)`
+            cm.Insert(
+                new CodeInstruction(OpCodes.Call, kLoadedDeviceNameGetter),
+                new CodeInstruction(OpCodes.Ldstr, "OpenVR"),
+                new CodeInstruction(OpCodes.Ldc_I4_5),
+                new CodeInstruction(OpCodes.Callvirt, kIndexOfMethod),
+                new CodeInstruction(OpCodes.Ldc_I4_0));
+
+            cm.InsertBranch(OpCodes.Bge, cm.Pos + 6);
+
+            return cm.InstructionEnumeration();
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -130,12 +145,92 @@ namespace DynamicOpenVR.BeatSaber
             }
         }
 
+        private IEnumerator InitializeOpenVR()
+        {
+            _logger.Trace($"Waiting for {nameof(XRGeneralSettings)} to finish initializing");
+
+            XRManagerSettings manager = XRGeneralSettings.Instance.Manager;
+
+            // Initialize ASAP. WaitForEndOfFrame is necessary to avoid play space not being positioned properly.
+            yield return new WaitUntil(() => manager.isInitializationComplete);
+            yield return new WaitForEndOfFrame();
+
+            _logger.Trace($"Disabling current XR Loader '{manager.activeLoader.name}'");
+
+            // disable OpenXR
+            manager.StopSubsystems();
+            manager.DeinitializeLoader();
+
+            if (Environment.GetCommandLineArgs().Contains("fpfc"))
+            {
+                yield break;
+            }
+
+            // create settings
+            OpenVRSettings settings = ScriptableObject.CreateInstance<OpenVRSettings>();
+            settings.name = "Open VR Settings";
+            settings.InitializationType = OpenVRSettings.InitializationTypes.Scene;
+            settings.MirrorView = OpenVRSettings.MirrorViewModes.Left;
+            settings.ActionManifestFileRelativeFilePath = null;
+            settings.StereoRenderingMode = OpenVRSettings.StereoRenderingModes.SinglePassInstanced;
+
+            _logger.Trace($"Creating {nameof(OpenVRLoader)}");
+
+            OpenVRLoader loader = ScriptableObject.CreateInstance<OpenVRLoader>();
+            loader.name = "Open VR Loader";
+
+            // add to registered loaders or else TryAddLoader won't work
+            manager.GetField<HashSet<XRLoader>, XRManagerSettings>("m_RegisteredLoaders").Add(loader);
+
+            // make sure OpenVR is the first manager is the list
+            if (!manager.TryAddLoader(loader, 0))
+            {
+                _logger.Error($"Failed to add loader to {nameof(XRManagerSettings)}");
+                yield break;
+            }
+
+            _logger.Info($"Initializing {nameof(OpenVRLoader)}");
+
+            manager.InitializeLoaderSync();
+
+            if (manager.activeLoader != loader)
+            {
+                if (manager.activeLoader != null)
+                {
+                    _logger.Error($"Failed to initialize {nameof(OpenVRLoader)}; current loader is {manager.activeLoader.name}.");
+                }
+                else
+                {
+                    _logger.Error($"Failed to initialize {nameof(OpenVRLoader)}; no loader is currently active.");
+                }
+
+                yield break;
+            }
+
+            manager.StartSubsystems();
+
+            RegisterActionSet();
+            ApplyHarmonyPatches();
+
+            OpenVRActionManager.instance.Initialize("Beat Saber", kActionManifestPath);
+
+            try
+            {
+                AddManifestToSteamConfig();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Failed to update SteamVR manifest.");
+                _logger.Error(ex);
+            }
+        }
+
         private void AddManifestToSteamConfig()
         {
             VRApplication beatSaberManifest = ReadBeatSaberManifest(kGlobalManifestPath);
 
             beatSaberManifest.actionManifestPath = kActionManifestPath;
-            beatSaberManifest.defaultBindings.Clear();
+            beatSaberManifest.defaultBindings?.Clear();
 
             var vrManifest = new VRApplicationManifest
             {
@@ -178,7 +273,7 @@ namespace DynamicOpenVR.BeatSaber
             }
             else
             {
-                _logger.Info("Global manifest is already in app config");
+                _logger.Trace("Global manifest is already in app config");
             }
 
             if (updated)

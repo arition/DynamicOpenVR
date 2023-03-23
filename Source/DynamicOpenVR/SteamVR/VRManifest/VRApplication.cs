@@ -33,11 +33,11 @@ namespace DynamicOpenVR.SteamVR.VRManifest
 
         public string launchType { get; set; }
 
-        public Dictionary<string, Dictionary<string, string>> strings { get; }
+        public IDictionary<string, IDictionary<string, string>> strings { get; set; }
 
         public string imagePath { get; set; }
 
-        public List<DefaultBinding> defaultBindings { get; } = new();
+        public IList<DefaultBinding> defaultBindings { get; set; }
 
         public string lastPlayedTime { get; set; }
 

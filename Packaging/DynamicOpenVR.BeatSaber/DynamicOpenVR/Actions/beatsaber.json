@@ -209,7 +209,7 @@
       "/actions/main/in/right_trigger": "Right Trigger Pull",
       "/actions/main/in/left_menu_button": "Left Menu Button",
       "/actions/main/in/right_menu_button": "Right Menu Button",
-      "/actions/main/out/left_slice_haptics": "Left Slice Haptic Feedback",
+      "/actions/main/out/left_slice_haptics": "j Slice Haptic Feedback",
       "/actions/main/out/right_slice_haptics": "Right Slice Haptic Feedback",
       "/actions/main/in/left_hand_pose": "Left Hand Pose",
       "/actions/main/in/right_hand_pose": "Right Hand Pose",

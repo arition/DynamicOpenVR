@@ -1,4 +1,4 @@
-name: Build
+name: Build (Beat Saber)
 
 on:
   push:
@@ -26,6 +26,7 @@ jobs:
       with:
         manifest: ${{ github.workspace }}\Source\DynamicOpenVR.BeatSaber\manifest.json
         path: ${{ runner.temp }}\BeatSaberBindings
+        game-version: 1.28.0
 
     - name: Build Debug
       run: dotnet build Source\DynamicOpenVR.BeatSaber\DynamicOpenVR.BeatSaber.csproj -c Debug -p:BeatSaberDir=${{ runner.temp }}\BeatSaberBindings
