@@ -16,9 +16,11 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // </copyright>
 
+using System;
 using HarmonyLib;
 using IPA.Utilities;
 using UnityEngine;
+using UnityEngine.XR;
 using Zenject;
 
 namespace DynamicOpenVR.BeatSaber.HarmonyPatches
@@ -28,14 +30,20 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
     {
         private static void Postfix(DiContainer container, UnityXRHelper ____unityXRHelperPrefab)
         {
+            if (XRSettings.loadedDeviceName.IndexOf("OpenVR", StringComparison.OrdinalIgnoreCase) == -1)
+            {
+                return;
+            }
+
             if (container.HasBinding<IVRPlatformHelper>())
             {
-                GameObject gameObject = new(nameof(OpenVRHelper));
-                ____unityXRHelperPrefab.CopyComponent(typeof(OpenVRHelper), gameObject);
-
                 container.Unbind<IVRPlatformHelper>();
-                container.Bind<IVRPlatformHelper>().To<OpenVRHelper>().FromComponentOn(gameObject).AsSingle();
             }
+
+            GameObject gameObject = new(nameof(OpenVRHelper));
+            ____unityXRHelperPrefab.CopyComponent(typeof(OpenVRHelper), gameObject);
+
+            container.Bind<IVRPlatformHelper>().To<OpenVRHelper>().FromComponentOn(gameObject).AsSingle();
         }
     }
 }
