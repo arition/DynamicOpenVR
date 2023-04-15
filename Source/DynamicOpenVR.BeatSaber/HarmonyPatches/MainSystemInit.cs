@@ -1,4 +1,4 @@
-﻿// <copyright file="UnityXRHelper.cs" company="Nicolas Gnyra">
+﻿// <copyright file="MainSystemInit.cs" company="Nicolas Gnyra">
 // DynamicOpenVR.BeatSaber - An implementation of DynamicOpenVR as a Beat Saber plugin.
 // Copyright © 2019-2023 Nicolas Gnyra
 //
@@ -16,28 +16,26 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // </copyright>
 
-using System;
-using DynamicOpenVR.IO;
 using HarmonyLib;
-using UnityEngine.XR;
+using IPA.Utilities;
+using UnityEngine;
+using Zenject;
 
 namespace DynamicOpenVR.BeatSaber.HarmonyPatches
 {
-    [HarmonyPatch(typeof(UnityXRHelper), nameof(UnityXRHelper.TriggerHapticPulse))]
-    internal static class UnityXRHelper_TriggerHapticPulse
+    [HarmonyPatch(typeof(MainSystemInit), nameof(MainSystemInit.InstallBindings), new[] { typeof(DiContainer), typeof(bool) })]
+    internal static class MainSystemInit_InstallBindings
     {
-        public static bool Prefix(XRNode node, float duration, float strength, float frequency)
+        private static void Postfix(DiContainer container, UnityXRHelper ____unityXRHelperPrefab)
         {
-            HapticVibrationOutput output = node switch
+            if (container.HasBinding<IVRPlatformHelper>())
             {
-                XRNode.LeftHand => Plugin.beatSaberActions.leftSliceHaptics,
-                XRNode.RightHand => Plugin.beatSaberActions.rightSliceHaptics,
-                _ => throw new InvalidOperationException($"Unexpected node '{node}'"),
-            };
+                GameObject gameObject = new(nameof(OpenVRHelper));
+                ____unityXRHelperPrefab.CopyComponent(typeof(OpenVRHelper), gameObject);
 
-            output.TriggerHapticVibration(duration, strength, frequency);
-
-            return false;
+                container.Unbind<IVRPlatformHelper>();
+                container.Bind<IVRPlatformHelper>().To<OpenVRHelper>().FromComponentOn(gameObject).AsSingle();
+            }
         }
     }
 }

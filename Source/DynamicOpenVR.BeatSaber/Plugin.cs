@@ -21,8 +21,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Reflection.Emit;
 using DynamicOpenVR.BeatSaber.InputCollections;
 using DynamicOpenVR.IO;
 using DynamicOpenVR.SteamVR;
@@ -35,7 +33,6 @@ using Newtonsoft.Json.Serialization;
 using Unity.XR.OpenVR;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.XR;
 using UnityEngine.XR.Management;
 using Zenject;
 using Logger = IPA.Logging.Logger;
@@ -62,9 +59,6 @@ namespace DynamicOpenVR.BeatSaber
 
         private static readonly string kActionManifestPath = Path.Combine(UnityGame.InstallPath, "DynamicOpenVR", "action_manifest.json");
 
-        private static readonly MethodInfo kLoadedDeviceNameGetter = AccessTools.PropertyGetter(typeof(XRSettings), nameof(XRSettings.loadedDeviceName));
-        private static readonly MethodInfo kIndexOfMethod = AccessTools.Method(typeof(string), nameof(string.IndexOf), new Type[] { typeof(string), typeof(StringComparison) });
-
         private readonly Logger _logger;
         private readonly Harmony _harmonyInstance;
 
@@ -90,8 +84,6 @@ namespace DynamicOpenVR.BeatSaber
 
             SceneManager.sceneLoaded += OnSceneLoaded;
 
-            _harmonyInstance.Patch(AccessTools.Method(typeof(MainSystemInit), nameof(MainSystemInit.InstallBindings), new Type[] { typeof(DiContainer) }), transpiler: new HarmonyMethod(AccessTools.Method(typeof(Plugin), nameof(MainSystemInitInstallBindingsTranspiler))));
-
             SharedCoroutineStarter.instance.StartCoroutine(InitializeOpenVR());
         }
 
@@ -99,38 +91,6 @@ namespace DynamicOpenVR.BeatSaber
         public void OnExit()
         {
             beatSaberActions?.Dispose();
-        }
-
-        private static IEnumerable<CodeInstruction> MainSystemInitInstallBindingsTranspiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
-        {
-            var cm = new CodeMatcher(instructions, generator);
-
-            cm.MatchForward(
-                true,
-                new CodeMatch((instruction) => instruction.opcode == OpCodes.Call && ((MethodInfo)instruction.operand) == kLoadedDeviceNameGetter),
-                new CodeMatch((instruction) => instruction.opcode == OpCodes.Ldstr && ((string)instruction.operand) == "OpenXR"),
-                new CodeMatch((instruction) => instruction.opcode == OpCodes.Ldc_I4_5),
-                new CodeMatch((instruction) => instruction.opcode == OpCodes.Callvirt && ((MethodInfo)instruction.operand) == kIndexOfMethod),
-                new CodeMatch((instruction) => instruction.opcode == OpCodes.Ldc_I4_0),
-                new CodeMatch((instruction) => instruction.opcode == OpCodes.Blt));
-
-            if (!cm.IsValid)
-            {
-                Debug.LogError($"Could not find UnityXR instructions; input may not work as expected");
-                return instructions;
-            }
-
-            // this is simply adding `|| XRSettings.loadedDeviceName.IndexOf("OpenVR", StringComparison.OrdinalIgnoreCase)`
-            cm.Insert(
-                new CodeInstruction(OpCodes.Call, kLoadedDeviceNameGetter),
-                new CodeInstruction(OpCodes.Ldstr, "OpenVR"),
-                new CodeInstruction(OpCodes.Ldc_I4_5),
-                new CodeInstruction(OpCodes.Callvirt, kIndexOfMethod),
-                new CodeInstruction(OpCodes.Ldc_I4_0));
-
-            cm.InsertBranch(OpCodes.Bge, cm.Pos + 6);
-
-            return cm.InstructionEnumeration();
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)

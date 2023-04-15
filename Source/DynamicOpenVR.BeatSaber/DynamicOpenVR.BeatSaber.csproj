@@ -35,6 +35,9 @@
     <Reference Include="Main">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Main.dll</HintPath>
     </Reference>
+    <Reference Include="MathUtils">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\MathUtils.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(BeatSaberDir)\Libs\Newtonsoft.Json.dll</HintPath>
     </Reference>
