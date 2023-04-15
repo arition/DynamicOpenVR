@@ -18,6 +18,7 @@
 
 using System;
 using DynamicOpenVR.IO;
+using IPA.Utilities;
 using UnityEngine;
 using UnityEngine.XR;
 
@@ -25,6 +26,8 @@ namespace DynamicOpenVR.BeatSaber
 {
     internal class OpenVRHelper : UnityXRHelper
     {
+        private static readonly PropertyAccessor<UnityXRHelper, bool>.Setter kUnityXRHelperUserPresenceSetter = PropertyAccessor<UnityXRHelper, bool>.GetSetter("userPresence");
+
         public override Vector2 GetAnyJoystickMaxAxis()
         {
             return new Vector2(
@@ -111,6 +114,17 @@ namespace DynamicOpenVR.BeatSaber
             };
 
             output.TriggerHapticVibration(duration, strength, frequency);
+        }
+
+        private void Update()
+        {
+            BooleanInput headsetOnHead = Plugin.beatSaberActions.headsetOnHead;
+
+            if (headsetOnHead.activeChange || headsetOnHead.inactiveChange)
+            {
+                UnityXRHelper self = this;
+                kUnityXRHelperUserPresenceSetter(ref self, headsetOnHead.state);
+            }
         }
 
         private float AbsMax(float a, float b) => Mathf.Abs(a) > Mathf.Abs(b) ? a : b;

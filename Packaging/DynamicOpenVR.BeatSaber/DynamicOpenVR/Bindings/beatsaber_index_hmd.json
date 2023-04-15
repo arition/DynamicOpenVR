@@ -1,0 +1,18 @@
+{
+   "bindings" : {
+      "/actions/main" : {
+         "sources" : [            
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/main/in/headset_on_head"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/head/proximity"
+            }
+         ]
+      }
+   },
+   "controller_type" : "indexhmd"
+}

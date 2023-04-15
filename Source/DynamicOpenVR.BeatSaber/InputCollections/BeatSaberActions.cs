@@ -43,6 +43,8 @@ namespace DynamicOpenVR.BeatSaber.InputCollections
 
         public Vector2Input rightThumbstick { get; init; }
 
+        public BooleanInput headsetOnHead { get; init; }
+
         public void Dispose()
         {
             leftTrigger?.Dispose();
@@ -55,6 +57,7 @@ namespace DynamicOpenVR.BeatSaber.InputCollections
             rightHandPose?.Dispose();
             leftThumbstick?.Dispose();
             rightThumbstick?.Dispose();
+            headsetOnHead?.Dispose();
         }
     }
 }

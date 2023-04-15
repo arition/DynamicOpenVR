@@ -307,6 +307,7 @@ namespace DynamicOpenVR.BeatSaber
                 rightHandPose = new PoseInput("/actions/main/in/right_hand_pose"),
                 leftThumbstick = new Vector2Input("/actions/main/in/left_thumbstick"),
                 rightThumbstick = new Vector2Input("/actions/main/in/right_thumbstick"),
+                headsetOnHead = new BooleanInput("/actions/main/in/headset_on_head"),
             };
 
             // Generic Unity InputDevices stuff

@@ -51,6 +51,11 @@
       "type": "vector2"
     },
     {
+      "name": "/actions/main/in/headset_on_head",
+      "requirement": "optional",
+      "type": "boolean"
+    },
+    {
       "name": "/actions/unity/in/left_pose",
       "requirement": "suggested",
       "type": "pose"
@@ -215,6 +220,7 @@
       "/actions/main/in/right_hand_pose": "Right Hand Pose",
       "/actions/main/in/left_thumbstick": "Left Joystick Position",
       "/actions/main/in/right_thumbstick": "Right Joystick Position",
+      "/actions/main/in/headset_on_head": "Headset on head (proximity sensor)",
       "/actions/unity": "Unity XR Input",
       "/actions/unity/in/left_pose": "Left Controller Pose",
       "/actions/unity/in/left_primary_button": "Left Primary Button",
