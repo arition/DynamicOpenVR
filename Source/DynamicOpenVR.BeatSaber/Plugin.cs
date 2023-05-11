@@ -17,7 +17,6 @@
 // </copyright>
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -62,6 +61,7 @@ namespace DynamicOpenVR.BeatSaber
         private readonly Logger _logger;
         private readonly Harmony _harmonyInstance;
 
+        private bool _initializing = false;
         private AppConfig _updatedAppConfig;
 
         [Init]
@@ -71,7 +71,13 @@ namespace DynamicOpenVR.BeatSaber
             _harmonyInstance = new Harmony("com.nicoco007.dynamicopenvr.beatsaber");
 
             Logging.Logger.handler = new IPALogHandler(logger);
+
+            // We need to run the replacement logic after the splash screen scene unloads but before anything else.
+            // Awake will run before before OnSceneLoaded gets invoked so we can make changes before the first SceneContext initializes.
+            _harmonyInstance.Patch(AccessTools.Method(typeof(SceneContext), nameof(SceneContext.Awake)), prefix: new HarmonyMethod(AccessTools.Method(typeof(Plugin), nameof(InvokePreSceneContextAwake))));
         }
+
+        private static event Action _preSceneContextAwake;
 
         public static UnityXRActions unityXRActions { get; private set; }
 
@@ -83,14 +89,21 @@ namespace DynamicOpenVR.BeatSaber
             _logger.Info("Starting " + typeof(Plugin).Namespace);
 
             SceneManager.sceneLoaded += OnSceneLoaded;
-
-            SharedCoroutineStarter.instance.StartCoroutine(InitializeOpenVR());
+            _preSceneContextAwake += InitializeOpenVR;
         }
 
         [OnExit]
         public void OnExit()
         {
             beatSaberActions?.Dispose();
+
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+            _preSceneContextAwake -= InitializeOpenVR;
+        }
+
+        private static void InvokePreSceneContextAwake()
+        {
+            _preSceneContextAwake?.Invoke();
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -105,25 +118,37 @@ namespace DynamicOpenVR.BeatSaber
             }
         }
 
-        private IEnumerator InitializeOpenVR()
+        private void InitializeOpenVR()
         {
-            _logger.Trace($"Waiting for {nameof(XRGeneralSettings)} to finish initializing");
+            if (_initializing)
+            {
+                return;
+            }
+
+            _initializing = true;
 
             XRManagerSettings manager = XRGeneralSettings.Instance.Manager;
 
-            // Initialize ASAP. WaitForEndOfFrame is necessary to avoid play space not being positioned properly.
-            yield return new WaitUntil(() => manager.isInitializationComplete);
-            yield return new WaitForEndOfFrame();
+            if (!manager.isInitializationComplete)
+            {
+                _logger.Error($"{nameof(XRManagerSettings)} hasn't completed initialization!");
+                return;
+            }
+
+            if (manager.activeLoaders.Count == 0)
+            {
+                _logger.Error("No active XR loaders found");
+                return;
+            }
 
             _logger.Trace($"Disabling current XR Loader '{manager.activeLoader.name}'");
 
-            // disable OpenXR
             manager.StopSubsystems();
             manager.DeinitializeLoader();
 
             if (Environment.GetCommandLineArgs().Contains("fpfc"))
             {
-                yield break;
+                return;
             }
 
             // create settings
@@ -146,7 +171,7 @@ namespace DynamicOpenVR.BeatSaber
             if (!manager.TryAddLoader(loader, 0))
             {
                 _logger.Error($"Failed to add loader to {nameof(XRManagerSettings)}");
-                yield break;
+                return;
             }
 
             _logger.Info($"Initializing {nameof(OpenVRLoader)}");
@@ -164,7 +189,7 @@ namespace DynamicOpenVR.BeatSaber
                     _logger.Error($"Failed to initialize {nameof(OpenVRLoader)}; no loader is currently active.");
                 }
 
-                yield break;
+                return;
             }
 
             manager.StartSubsystems();
