@@ -74,7 +74,9 @@ namespace DynamicOpenVR.BeatSaber
 
             // We need to run the replacement logic after the splash screen scene unloads but before anything else.
             // Awake will run before before OnSceneLoaded gets invoked so we can make changes before the first SceneContext initializes.
-            _harmonyInstance.Patch(AccessTools.Method(typeof(SceneContext), nameof(SceneContext.Awake)), prefix: new HarmonyMethod(AccessTools.Method(typeof(Plugin), nameof(InvokePreSceneContextAwake))));
+            _harmonyInstance.Patch(
+                AccessTools.Method(typeof(SceneContext), nameof(SceneContext.Awake)),
+                prefix: new HarmonyMethod(AccessTools.Method(typeof(Plugin), nameof(InvokePreSceneContextAwake)), before: new string[] { "com.nicoco007.open-xr-tracker-profiles" }));
         }
 
         private static event Action _preSceneContextAwake;
