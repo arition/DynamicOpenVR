@@ -14,11 +14,11 @@
       "poses": [
         {
           "output": "/actions/main/in/left_hand_pose",
-          "path": "/user/hand/left/pose/raw"
+          "path": "/user/hand/left/pose/grip"
         },
         {
           "output": "/actions/main/in/right_hand_pose",
-          "path": "/user/hand/right/pose/raw"
+          "path": "/user/hand/right/pose/grip"
         }
       ],
       "sources": [
@@ -92,11 +92,11 @@
       "poses": [
         {
           "output": "/actions/unity/in/left_pose",
-          "path": "/user/hand/left/pose/raw"
+          "path": "/user/hand/left/pose/grip"
         },
         {
           "output": "/actions/unity/in/right_pose",
-          "path": "/user/hand/right/pose/raw"
+          "path": "/user/hand/right/pose/grip"
         }
       ],
       "sources": [
