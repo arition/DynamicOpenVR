@@ -16,6 +16,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // </copyright>
 
+using System.Linq;
 using UnityEngine;
 using Valve.VR;
 
@@ -23,6 +24,8 @@ namespace DynamicOpenVR.IO
 {
     public class PoseInput : OVRInput
     {
+        private static readonly ETrackingResult[] kValidTrackingResults = { ETrackingResult.Running_OK, ETrackingResult.Running_OutOfRange, ETrackingResult.Calibrating_OutOfRange };
+
         private InputPoseActionData_t _actionData;
         private Pose _pose;
 
@@ -54,7 +57,7 @@ namespace DynamicOpenVR.IO
         /// <summary>
         /// Gets a value indicating whether the device is currently tracking properly or not.
         /// </summary>
-        public bool isTracking => _actionData.pose.eTrackingResult == ETrackingResult.Running_OK;
+        public bool isTracking => _actionData.pose.bPoseIsValid && kValidTrackingResults.Contains(_actionData.pose.eTrackingResult);
 
         /// <inheritdoc/>
         internal override void UpdateData()
