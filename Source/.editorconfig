@@ -389,41 +389,9 @@ csharp_style_prefer_extended_property_pattern = true:suggestion
 csharp_style_namespace_declarations = block_scoped:silent
 csharp_style_prefer_method_group_conversion = true:silent
 
-[DynamicOpenVR/openvr_api.cs]
-dotnet_diagnostic.IDE0001.severity = silent
-dotnet_diagnostic.IDE0002.severity = silent
-dotnet_diagnostic.IDE0004.severity = silent
-dotnet_diagnostic.IDE0005.severity = silent
-dotnet_diagnostic.IDE0007.severity = silent
-dotnet_diagnostic.IDE0008.severity = silent
-dotnet_diagnostic.IDE0040.severity = silent
-dotnet_diagnostic.IDE0055.severity = silent
-dotnet_diagnostic.IDE1006.severity = silent
-
 [**/HarmonyPatches/**.cs]
 dotnet_diagnostic.SA1402.severity = silent
 dotnet_diagnostic.SA1649.severity = silent
-
-[**/AssemblyInfo.cs]
-dotnet_diagnostic.SA1633.severity = silent
-
-[*.{cs,vb}]
-tab_width = 4
-indent_size = 4
-dotnet_style_operator_placement_when_wrapping = beginning_of_line
-dotnet_style_readonly_field = true:warning
-dotnet_style_require_accessibility_modifiers = for_non_interface_members:silent
-dotnet_style_coalesce_expression = true:warning
-dotnet_style_null_propagation = true:warning
-dotnet_style_prefer_is_null_check_over_reference_equality_method = true:warning
-dotnet_style_prefer_auto_properties = true:warning
-dotnet_style_object_initializer = true:suggestion
-dotnet_style_collection_initializer = true:suggestion
-dotnet_style_prefer_simplified_boolean_expressions = true:warning
-dotnet_style_prefer_conditional_expression_over_assignment = true:suggestion
-
-[DynamicOpenVR.BeatSaber/Unity.XR.OpenVR/*.cs]
-generated_code = true
 
 [DynamicOpenVR/openvr_api.cs]
 generated_code = true
