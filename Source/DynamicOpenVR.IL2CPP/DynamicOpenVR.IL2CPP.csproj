@@ -29,6 +29,16 @@
   <ItemGroup>
     <Compile Include="$(SolutionDir)DynamicOpenVR\**\*.cs" Exclude="$(SolutionDir)DynamicOpenVR\bin\**;$(SolutionDir)DynamicOpenVR\obj\**" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="Microsoft.CodeAnalysis.CSharp.CodeStyle" Version="4.5.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Update="Microsoft.Unity.Analyzers" Version="1.17.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
   <Target Name="ClearReferenceCopyLocalPaths" AfterTargets="ResolveAssemblyReferences">
     <ItemGroup>
       <!-- prevent any referenced DLLs from being copied to the output folder -->

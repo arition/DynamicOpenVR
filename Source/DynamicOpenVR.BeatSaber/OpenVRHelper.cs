@@ -24,28 +24,28 @@ using UnityEngine.XR;
 
 namespace DynamicOpenVR.BeatSaber
 {
-    internal class OpenVRHelper : UnityXRHelper
+    internal class OpenVRHelper : UnityXRHelper, IVRPlatformHelper
     {
         private static readonly PropertyAccessor<UnityXRHelper, bool>.Setter kUnityXRHelperUserPresenceSetter = PropertyAccessor<UnityXRHelper, bool>.GetSetter("userPresence");
 
-        public override Vector2 GetAnyJoystickMaxAxis()
+        public new Vector2 GetAnyJoystickMaxAxis()
         {
             return new Vector2(
                 AbsMax(Plugin.beatSaberActions.leftThumbstick.vector.x, Plugin.beatSaberActions.rightThumbstick.vector.x),
                 AbsMax(Plugin.beatSaberActions.leftThumbstick.vector.y, Plugin.beatSaberActions.rightThumbstick.vector.y));
         }
 
-        public override bool GetMenuButton()
+        public new bool GetMenuButton()
         {
             return Plugin.beatSaberActions.leftMenuButton.state || Plugin.beatSaberActions.rightMenuButton.state;
         }
 
-        public override bool GetMenuButtonDown()
+        public new bool GetMenuButtonDown()
         {
             return Plugin.beatSaberActions.leftMenuButton.activeChange || Plugin.beatSaberActions.rightMenuButton.activeChange;
         }
 
-        public override bool GetNodePose(XRNode nodeType, int idx, out Vector3 pos, out Quaternion rot)
+        public new bool GetNodePose(XRNode nodeType, int idx, out Vector3 pos, out Quaternion rot)
         {
             PoseInput poseInput = nodeType switch
             {
@@ -66,7 +66,7 @@ namespace DynamicOpenVR.BeatSaber
             return true;
         }
 
-        public override Vector2 GetThumbstickValue(XRNode node)
+        public new Vector2 GetThumbstickValue(XRNode node)
         {
             Vector2Input input = node switch
             {
@@ -83,7 +83,7 @@ namespace DynamicOpenVR.BeatSaber
             return input.vector;
         }
 
-        public override float GetTriggerValue(XRNode node)
+        public new float GetTriggerValue(XRNode node)
         {
             VectorInput input = node switch
             {
@@ -100,11 +100,11 @@ namespace DynamicOpenVR.BeatSaber
             return input.value;
         }
 
-        public override void StopHaptics(XRNode node)
+        public new void StopHaptics(XRNode node)
         {
         }
 
-        public override void TriggerHapticPulse(XRNode node, float duration, float strength, float frequency)
+        public new void TriggerHapticPulse(XRNode node, float duration, float strength, float frequency)
         {
             HapticVibrationOutput output = node switch
             {

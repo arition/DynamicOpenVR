@@ -21,6 +21,9 @@ jobs:
     - name: Fetch Beat Saber Bindings
       run: git clone https://${{ github.actor }}:${{ secrets.PRIVATE_GITHUB_TOKEN }}@github.com/nicoco007/BeatSaberBindings --branch v${{ env.GAME_VERSION }} --single-branch '${{ runner.temp }}\BeatSaberBindings\Beat Saber_Data\Managed'
 
+    - name: Add NuGet source
+      run: dotnet nuget add source --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text "https://nuget.pkg.github.com/nicoco007/index.json"
+
     - name: Build Debug
       run: dotnet build Source\DynamicOpenVR\DynamicOpenVR.csproj -c Debug -p:BeatSaberDir=${{ runner.temp }}\BeatSaberBindings
 
