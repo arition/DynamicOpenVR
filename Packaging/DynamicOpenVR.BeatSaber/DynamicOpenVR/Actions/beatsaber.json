@@ -21,12 +21,12 @@
       "type": "boolean"
     },
     {
-      "name": "/actions/main/out/left_slice_haptics",
+      "name": "/actions/main/out/left_hand_haptics",
       "requirement": "suggested",
       "type": "vibration"
     },
     {
-      "name": "/actions/main/out/right_slice_haptics",
+      "name": "/actions/main/out/right_hand_haptics",
       "requirement": "suggested",
       "type": "vibration"
     },
@@ -214,8 +214,8 @@
       "/actions/main/in/right_trigger": "Right Trigger Pull",
       "/actions/main/in/left_menu_button": "Left Menu Button",
       "/actions/main/in/right_menu_button": "Right Menu Button",
-      "/actions/main/out/left_slice_haptics": "j Slice Haptic Feedback",
-      "/actions/main/out/right_slice_haptics": "Right Slice Haptic Feedback",
+      "/actions/main/out/left_hand_haptics": "Left Hand Haptic Vibration",
+      "/actions/main/out/right_hand_haptics": "Right Hand Haptic Vibration",
       "/actions/main/in/left_hand_pose": "Left Hand Pose",
       "/actions/main/in/right_hand_pose": "Right Hand Pose",
       "/actions/main/in/left_thumbstick": "Left Joystick Position",

@@ -31,9 +31,9 @@ namespace DynamicOpenVR.BeatSaber.InputCollections
 
         public BooleanInput rightMenuButton { get; init; }
 
-        public HapticVibrationOutput leftSliceHaptics { get; init; }
+        public HapticVibrationOutput leftHandHaptics { get; init; }
 
-        public HapticVibrationOutput rightSliceHaptics { get; init; }
+        public HapticVibrationOutput rightHandHaptics { get; init; }
 
         public PoseInput leftHandPose { get; init; }
 
@@ -51,8 +51,8 @@ namespace DynamicOpenVR.BeatSaber.InputCollections
             rightTrigger?.Dispose();
             leftMenuButton?.Dispose();
             rightMenuButton?.Dispose();
-            leftSliceHaptics?.Dispose();
-            rightSliceHaptics?.Dispose();
+            leftHandHaptics?.Dispose();
+            rightHandHaptics?.Dispose();
             leftHandPose?.Dispose();
             rightHandPose?.Dispose();
             leftThumbstick?.Dispose();

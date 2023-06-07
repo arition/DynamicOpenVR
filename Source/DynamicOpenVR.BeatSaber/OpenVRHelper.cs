@@ -100,22 +100,6 @@ namespace DynamicOpenVR.BeatSaber
             return input.value;
         }
 
-        public new void StopHaptics(XRNode node)
-        {
-        }
-
-        public new void TriggerHapticPulse(XRNode node, float duration, float strength, float frequency)
-        {
-            HapticVibrationOutput output = node switch
-            {
-                XRNode.LeftHand => Plugin.beatSaberActions.leftSliceHaptics,
-                XRNode.RightHand => Plugin.beatSaberActions.rightSliceHaptics,
-                _ => throw new InvalidOperationException($"Unexpected node '{node}'"),
-            };
-
-            output.TriggerHapticVibration(duration, strength, frequency);
-        }
-
         private void Update()
         {
             BooleanInput headsetOnHead = Plugin.beatSaberActions.headsetOnHead;

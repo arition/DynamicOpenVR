@@ -3,11 +3,11 @@
     "/actions/main": {
       "haptics": [
         {
-          "output": "/actions/main/out/left_slice_haptics",
+          "output": "/actions/main/out/left_hand_haptics",
           "path": "/user/hand/left/output/haptic"
         },
         {
-          "output": "/actions/main/out/right_slice_haptics",
+          "output": "/actions/main/out/right_hand_haptics",
           "path": "/user/hand/right/output/haptic"
         }
       ],
