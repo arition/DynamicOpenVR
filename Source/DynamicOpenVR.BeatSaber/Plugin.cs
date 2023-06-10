@@ -167,7 +167,7 @@ namespace DynamicOpenVR.BeatSaber
             loader.name = "Open VR Loader";
 
             // add to registered loaders or else TryAddLoader won't work
-            manager.GetField<HashSet<XRLoader>, XRManagerSettings>("m_RegisteredLoaders").Add(loader);
+            manager.m_RegisteredLoaders.Add(loader);
 
             // make sure OpenVR is the first manager is the list
             if (!manager.TryAddLoader(loader, 0))

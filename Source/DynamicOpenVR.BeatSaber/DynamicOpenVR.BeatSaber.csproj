@@ -23,7 +23,7 @@
     <Reference Include="0Harmony">
       <HintPath>$(BeatSaberDir)\Libs\0Harmony.dll</HintPath>
     </Reference>
-    <Reference Include="HMLib">
+    <Reference Include="HMLib" Publicize="true">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\HMLib.dll</HintPath>
     </Reference>
     <Reference Include="HMUI">
@@ -53,7 +53,7 @@
     <Reference Include="UnityEngine.InputLegacyModule">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.XR.Management">
+    <Reference Include="Unity.XR.Management" Publicize="true">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Unity.XR.Management.dll</HintPath>
     </Reference>
     <!-- since it isn't copied over before compilation, reference the local file -->
@@ -115,6 +115,10 @@
     <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(BeatSaberDir)Plugins" Condition="Exists('$(TargetDir)DynamicOpenVR.BeatSaber.pdb')" />
   </Target>
   <ItemGroup>
+    <PackageReference Include="BSIPA.AssemblyPublicizer.MSBuild" Version="0.5.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="IsExternalInit" Version="1.0.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
