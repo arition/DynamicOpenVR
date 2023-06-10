@@ -110,9 +110,9 @@
     <Copy SourceFiles="$(TargetDir)DynamicOpenVR.dll" DestinationFolder="$(BeatSaberDir)\Libs" />
     <Copy SourceFiles="$(TargetDir)DynamicOpenVR.xml" DestinationFolder="$(BeatSaberDir)\Libs" />
     <Copy SourceFiles="$(TargetDir)DynamicOpenVR.pdb" DestinationFolder="$(BeatSaberDir)\Libs" Condition="Exists('$(TargetDir)DynamicOpenVR.pdb')" />
-    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(BeatSaberDir)Plugins" />
-    <Copy SourceFiles="$(TargetDir)$(TargetName).xml" DestinationFolder="$(BeatSaberDir)Plugins" />
-    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(BeatSaberDir)Plugins" Condition="Exists('$(TargetDir)DynamicOpenVR.BeatSaber.pdb')" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(BeatSaberDir)\Plugins" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).xml" DestinationFolder="$(BeatSaberDir)\Plugins" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(BeatSaberDir)\Plugins" Condition="Exists('$(TargetDir)$(TargetName).pdb')" />
   </Target>
   <ItemGroup>
     <PackageReference Include="BSIPA.AssemblyPublicizer.MSBuild" Version="0.5.0">
