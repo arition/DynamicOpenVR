@@ -31,7 +31,7 @@ jobs:
         path: ${{ runner.temp }}\BeatSaberBindings
 
     - name: Build Debug
-      run: dotnet build Source\DynamicOpenVR.BeatSaber\DynamicOpenVR.BeatSaber.csproj -c Debug -p:BeatSaberDir=${{ runner.temp }}\BeatSaberBindings
+      run: dotnet publish Source\DynamicOpenVR.BeatSaber\DynamicOpenVR.BeatSaber.csproj -c Debug -p:BeatSaberDir=${{ runner.temp }}\BeatSaberBindings
 
     - name: Upload Debug
       uses: actions/upload-artifact@v3
@@ -40,7 +40,7 @@ jobs:
         path: Source\DynamicOpenVR.BeatSaber\bin\Debug\net472\publish
 
     - name: Build Release
-      run: dotnet build Source\DynamicOpenVR.BeatSaber\DynamicOpenVR.BeatSaber.csproj -c Release -p:BeatSaberDir=${{ runner.temp }}\BeatSaberBindings
+      run: dotnet publish Source\DynamicOpenVR.BeatSaber\DynamicOpenVR.BeatSaber.csproj -c Release -p:BeatSaberDir=${{ runner.temp }}\BeatSaberBindings
 
     - name: Upload Release
       uses: actions/upload-artifact@v3
