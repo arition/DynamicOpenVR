@@ -80,11 +80,11 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
             switch (buttonName)
             {
                 case "MenuButtonLeftHand":
-                    __result = Plugin.beatSaberActions.leftMenuButton.activeChange;
+                    __result = Plugin.beatSaberActions.leftMenuButton.enabledChange;
                     break;
 
                 case "MenuButtonRightHand":
-                    __result = Plugin.beatSaberActions.rightMenuButton.activeChange;
+                    __result = Plugin.beatSaberActions.rightMenuButton.enabledChange;
                     break;
 
                 default:
@@ -126,11 +126,11 @@ namespace DynamicOpenVR.BeatSaber.HarmonyPatches
             switch (buttonName)
             {
                 case "MenuButtonLeftHand":
-                    __result = Plugin.beatSaberActions.leftMenuButton.inactiveChange;
+                    __result = Plugin.beatSaberActions.leftMenuButton.disabledChange;
                     break;
 
                 case "MenuButtonRightHand":
-                    __result = Plugin.beatSaberActions.rightMenuButton.inactiveChange;
+                    __result = Plugin.beatSaberActions.rightMenuButton.disabledChange;
                     break;
 
                 default:

@@ -39,7 +39,7 @@ namespace DynamicOpenVR.BeatSaber
 
         public new bool GetMenuButtonDown()
         {
-            return Plugin.beatSaberActions.leftMenuButton.activeChange || Plugin.beatSaberActions.rightMenuButton.activeChange;
+            return Plugin.beatSaberActions.leftMenuButton.enabledChange || Plugin.beatSaberActions.rightMenuButton.enabledChange;
         }
 
         public new bool GetNodePose(XRNode nodeType, int idx, out Vector3 pos, out Quaternion rot)
@@ -101,7 +101,7 @@ namespace DynamicOpenVR.BeatSaber
         {
             BooleanInput headsetOnHead = Plugin.beatSaberActions.headsetOnHead;
 
-            if (headsetOnHead.activeChange || headsetOnHead.inactiveChange)
+            if (headsetOnHead.enabledChange || headsetOnHead.disabledChange)
             {
                 userPresence = headsetOnHead.state;
             }

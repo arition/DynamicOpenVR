@@ -40,12 +40,12 @@ namespace DynamicOpenVR.IO
         /// <summary>
         /// Gets a value indicating whether the state changed from disabled to enabled since it was last checked or not.
         /// </summary>
-        public bool activeChange => _actionData.bState && _actionData.bChanged;
+        public bool enabledChange => _actionData.bState && _actionData.bChanged;
 
         /// <summary>
         /// Gets a value indicating whether the state changed from enabled to disabled since it was last checked or not.
         /// </summary>
-        public bool inactiveChange => !_actionData.bState && _actionData.bChanged;
+        public bool disabledChange => !_actionData.bState && _actionData.bChanged;
 
         /// <inheritdoc/>
         internal override void UpdateData()
