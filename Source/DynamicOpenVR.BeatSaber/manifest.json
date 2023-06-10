@@ -6,10 +6,10 @@
   "id": "DynamicOpenVR.BeatSaber",
   "name": "DynamicOpenVR.BeatSaber",
   "icon": "DynamicOpenVR.BeatSaber.Resources.icon.png",
-  "version": "0.4.0+dev",
+  "version": "0.5.0+dev",
   "dependsOn": {
     "BSIPA": "^4.3.0",
-    "DynamicOpenVR": "^0.4.0"
+    "DynamicOpenVR": "^0.5.0"
   },
   "files": [
     "Beat Saber_Data\\Managed\\Unity.XR.OpenVR.dll",
