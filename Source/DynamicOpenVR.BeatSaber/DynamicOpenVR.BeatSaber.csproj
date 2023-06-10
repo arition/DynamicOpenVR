@@ -83,13 +83,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DynamicOpenVR\DynamicOpenVR.csproj" />
   </ItemGroup>
-  <Target Name="ClearReferenceCopyLocalPaths" AfterTargets="ResolveAssemblyReferences">
-    <ItemGroup>
-      <!-- prevent any referenced DLLs from being copied to the output folder -->
-      <ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)" />
-    </ItemGroup>
-  </Target>
-  <Target Name="Organize" AfterTargets="AfterBuild">
+  <Target Name="PublishForBeatSaber" AfterTargets="AfterPublish">
     <ItemGroup>
       <CopyToOutput Include="$(ProjectDir)..\..\Packaging\DynamicOpenVR.BeatSaber\**\*.*" />
     </ItemGroup>
@@ -108,10 +102,17 @@
   </Target>
   <Target Name="CopyToBeatSaberFolder" AfterTargets="AfterBuild" Condition="$(BeatSaberDir) != ''">
     <ItemGroup>
-      <CopyToBeatSaberFolder Include="$(PublishDir)**\*.*" />
+      <CopyToBeatSaberFolder Include="$(ProjectDir)..\..\Packaging\DynamicOpenVR\**\*.*" />
+      <CopyToBeatSaberFolder Include="$(ProjectDir)..\..\Packaging\DynamicOpenVR.BeatSaber\**\*.*" />
     </ItemGroup>
-    
+
     <Copy SourceFiles="@(CopyToBeatSaberFolder)" DestinationFiles="@(CopyToBeatSaberFolder->'$(BeatSaberDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="$(TargetDir)DynamicOpenVR.dll" DestinationFolder="$(BeatSaberDir)\Libs" />
+    <Copy SourceFiles="$(TargetDir)DynamicOpenVR.xml" DestinationFolder="$(BeatSaberDir)\Libs" />
+    <Copy SourceFiles="$(TargetDir)DynamicOpenVR.pdb" DestinationFolder="$(BeatSaberDir)\Libs" Condition="Exists('$(TargetDir)DynamicOpenVR.pdb')" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(BeatSaberDir)Plugins" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).xml" DestinationFolder="$(BeatSaberDir)Plugins" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(BeatSaberDir)Plugins" Condition="Exists('$(TargetDir)DynamicOpenVR.BeatSaber.pdb')" />
   </Target>
   <ItemGroup>
     <PackageReference Include="IsExternalInit" Version="1.0.3">
