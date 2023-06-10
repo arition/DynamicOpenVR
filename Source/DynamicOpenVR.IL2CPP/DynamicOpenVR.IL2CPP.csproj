@@ -7,7 +7,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <LibrariesDir>$(ProjectDir)..\..\Libraries\Il2CppInterop\</LibrariesDir>
   </PropertyGroup>
-  <Import Project="$(SolutionDir)DynamicOpenVR\Common.props" />
+  <Import Project="$(ProjectDir)..\DynamicOpenVR\Common.props" />
   <ItemGroup>
     <Reference Include="Il2CppInterop.Common">
       <HintPath>$(LibrariesDir)\Il2CppInterop.Common.dll</HintPath>
@@ -27,7 +27,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="$(SolutionDir)DynamicOpenVR\**\*.cs" Exclude="$(SolutionDir)DynamicOpenVR\bin\**;$(SolutionDir)DynamicOpenVR\obj\**" />
+    <Compile Include="$(ProjectDir)..\DynamicOpenVR\**\*.cs" Exclude="$(ProjectDir)..\DynamicOpenVR\bin\**;$(ProjectDir)..\DynamicOpenVR\obj\**" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Update="Microsoft.CodeAnalysis.CSharp.CodeStyle" Version="4.5.0">
@@ -39,23 +39,14 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-  <Target Name="ClearReferenceCopyLocalPaths" AfterTargets="ResolveAssemblyReferences">
-    <ItemGroup>
-      <!-- prevent any referenced DLLs from being copied to the output folder -->
-      <ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)" />
-    </ItemGroup>
-  </Target>
-  <Target Name="Organize" AfterTargets="AfterBuild">
+  <Target Name="PublishForBepInEx" AfterTargets="Publish">
     <!-- clean up -->
     <RemoveDir Directories="$(PublishDir)" />
 
     <!-- create Libs folder and move DLL/PDB inside -->
     <MakeDir Directories="$(PublishDir)BepInEx\plugins" />
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(PublishDir)BepInEx\plugins" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).xml" DestinationFolder="$(PublishDir)BepInEx\plugins" />
     <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(PublishDir)BepInEx\plugins" Condition="$(DebugType) != 'none'" />
-    <Copy SourceFiles="$(TargetDir)$(TargetName).xml" DestinationFolder="$(PublishDir)BepInEx\plugins" Condition="$(DebugType) != 'none'" />
-
-    <!-- copy static files -->
-    <Copy SourceFiles="@(CopyToOutput)" DestinationFiles="@(CopyToOutput->'$(PublishDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
 </Project>

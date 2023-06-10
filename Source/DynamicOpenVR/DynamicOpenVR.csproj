@@ -8,7 +8,7 @@
     <LibrariesDir>$(ProjectDir)..\..\Libraries\Mono\</LibrariesDir>
   </PropertyGroup>
   <Import Project="Common.props" />
-  <Target Name="PublishForBeatSaber" AfterTargets="AfterPublish">    
+  <Target Name="PublishForBeatSaber" AfterTargets="Publish">    
     <ItemGroup>
       <CopyToOutput Include="$(ProjectDir)..\..\Packaging\DynamicOpenVR\**\*.*" />
     </ItemGroup>

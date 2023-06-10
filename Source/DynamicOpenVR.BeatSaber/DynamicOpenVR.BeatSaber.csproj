@@ -83,7 +83,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DynamicOpenVR\DynamicOpenVR.csproj" />
   </ItemGroup>
-  <Target Name="PublishForBeatSaber" AfterTargets="AfterPublish">
+  <Target Name="PublishForBeatSaber" AfterTargets="Publish">
     <ItemGroup>
       <CopyToOutput Include="$(ProjectDir)..\..\Packaging\DynamicOpenVR.BeatSaber\**\*.*" />
     </ItemGroup>

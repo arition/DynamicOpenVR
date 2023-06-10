@@ -59,29 +59,23 @@
     </Reference>
   </ItemGroup>
 
-  <Target Name="Organize" AfterTargets="AfterBuild">
+  <Target Name="PublishForBepInEx" AfterTargets="Publish">
     <!-- clean up -->
     <RemoveDir Directories="$(PublishDir)" />
     
     <!-- create Plugins folder and move plugin DLL/PDB inside -->
     <MakeDir Directories="$(PublishDir)" />
 
-    <Copy SourceFiles="$(TargetDir)DynamicOpenVR.IL2CPP.dll" DestinationFolder="$(PublishDir)" />
-    <Copy SourceFiles="$(TargetDir)DynamicOpenVR.IL2CPP.pdb" DestinationFolder="$(PublishDir)" Condition="Exists('$(TargetDir)DynamicOpenVR.IL2CPP.pdb')" />
-    <Copy SourceFiles="$(TargetDir)DynamicOpenVR.IL2CPP.xml" DestinationFolder="$(PublishDir)" Condition="Exists('$(TargetDir)DynamicOpenVR.IL2CPP.xml')" />
-
-    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(PublishDir)" />
-    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(PublishDir)" Condition="Exists('$(TargetDir)$(TargetName).pdb')" />
-
-    <!-- copy static files -->
-    <Copy SourceFiles="@(CopyToOutput)" DestinationFiles="@(CopyToOutput->'$(PublishDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(PublishDir)BepInEx\plugins" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(PublishDir)BepInEx\plugins" Condition="Exists('$(TargetDir)$(TargetName).pdb')" />
   </Target>
 
   <Target Name="CopyToGameDir" AfterTargets="AfterBuild" Condition="$(GameDir) != ''">
-    <ItemGroup>
-      <CopyToGameDir Include="$(PublishDir)**\*.*" />
-    </ItemGroup>
-    
-    <Copy SourceFiles="@(CopyToGameDir)" DestinationFiles="@(CopyToGameDir->'$(GameDir)\BepInEx\plugins\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="$(TargetDir)DynamicOpenVR.IL2CPP.dll" DestinationFolder="$(GameDir)BepInEx\plugins" />
+    <Copy SourceFiles="$(TargetDir)DynamicOpenVR.IL2CPP.xml" DestinationFolder="$(GameDir)BepInEx\plugins" />
+    <Copy SourceFiles="$(TargetDir)DynamicOpenVR.IL2CPP.pdb" DestinationFolder="$(GameDir)BepInEx\plugins" Condition="Exists('$(TargetDir)DynamicOpenVR.IL2CPP.pdb')" />
+
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(GameDir)BepInEx\plugins" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(GameDir)BepInEx\plugins" Condition="Exists('$(TargetDir)$(TargetName).pdb')" />
   </Target>
 </Project>
